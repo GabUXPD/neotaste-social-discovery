@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeoTaste — Social Discovery Sprint</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #0a0a0a;
+      color: #fefefe;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #11301d;
+      color: #53f293;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 24px;
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: clamp(32px, 6vw, 52px);
+      font-weight: 700;
+      line-height: 1.1;
+      text-align: center;
+      max-width: 700px;
+      margin-bottom: 16px;
+    }
+    h1 span { color: #53f293; }
+    .subtitle {
+      font-size: 16px;
+      font-weight: 500;
+      color: #737373;
+      text-align: center;
+      max-width: 520px;
+      line-height: 1.6;
+      margin-bottom: 48px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      width: 100%;
+      max-width: 900px;
+    }
+    .card {
+      background: #171717;
+      border: 1px solid #262626;
+      border-radius: 16px;
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+    .card:hover {
+      border-color: #53f29333;
+      transform: translateY(-2px);
+    }
+    .card__icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .card__title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fefefe;
+      margin-bottom: 6px;
+    }
+    .card__desc {
+      font-size: 12px;
+      font-weight: 500;
+      color: #737373;
+      line-height: 1.5;
+    }
+    .card__tag {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #53f293;
+      background: #53f2931a;
+      padding: 3px 10px;
+      border-radius: 24px;
+    }
+    .footer {
+      margin-top: 64px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #404040;
+      text-align: center;
+    }
+    .footer a { color: #53f29380; text-decoration: none; }
+    .footer a:hover { color: #53f293; }
+  </style>
+</head>
+<body>
+
+  <div class="badge">🔥 Design Sprint · May 2026</div>
+
+  <h1>NeoTaste<br /><span>Social Discovery</span></h1>
+  <p class="subtitle">
+    Lightweight social discovery layer built on the Recency Counter concept.
+    Helping users find restaurants through verified community activity.
+  </p>
+
+  <div class="grid">
+    <a class="card" href="peek-card.html">
+      <span class="card__icon">📍</span>
+      <div class="card__title">Peek Card · Map View</div>
+      <p class="card__desc">
+        Map view with recency pins (🔥), peek card with social signals,
+        and the "Why It's trending" tooltip.
+      </p>
+      <span class="card__tag">HTML prototype</span>
+    </a>
+
+    <a class="card" href="neotaste-design-system.md">
+      <span class="card__icon">🎨</span>
+      <div class="card__title">Design System Reference</div>
+      <p class="card__desc">
+        Full token extraction from Figma — colors, spacing, radius,
+        border widths, and typography. 94 base colors · 18 text styles.
+      </p>
+      <span class="card__tag">Token reference</span>
+    </a>
+
+    <a class="card" href="sprint-context.md">
+      <span class="card__icon">📋</span>
+      <div class="card__title">Sprint Context</div>
+      <p class="card__desc">
+        Full sprint brief: Recency Counter concept, user flows,
+        design decisions, cold start strategy, and constraints.
+      </p>
+      <span class="card__tag">Sprint doc</span>
+    </a>
+  </div>
+
+  <footer class="footer">
+    NeoTaste × Yummy Labs ·
+    <a href="https://github.com/GabUXPD/neotaste-social-discovery">GitHub</a> ·
+    Built with Figma MCP + Claude Code
+  </footer>
+
+</body>
+</html>
