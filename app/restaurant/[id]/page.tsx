@@ -320,7 +320,7 @@ export default function RestaurantDetailPage() {
         </div>
 
         {/* Name */}
-        <div style={{ fontSize: 26, fontWeight: 800, color: '#111827', lineHeight: 1.2, marginBottom: 6 }}>
+        <div style={{ fontSize: 32, fontWeight: 700, color: '#111827', lineHeight: '38px', marginBottom: 6 }}>
           {detail.name}
         </div>
 
@@ -331,7 +331,7 @@ export default function RestaurantDetailPage() {
 
         {/* Status */}
         <div style={{ fontSize: 13, fontWeight: 500, color: '#6b7280', marginBottom: 14 }}>
-          <span style={{ color: '#16a34a', fontWeight: 700 }}>Open</span>
+          <span style={{ color: '#0a0a0a', fontWeight: 700 }}>Open</span>
           {' · Closes at '}{detail.closeTime}{' · '}{detail.district}
         </div>
 
@@ -345,8 +345,8 @@ export default function RestaurantDetailPage() {
           ].map((btn) => (
             <button key={btn.label} style={{
               flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 5,
-              padding: '8px 14px', borderRadius: 9999,
-              border: '1px solid #e5e7eb', background: '#ffffff',
+              padding: '12px 16px', borderRadius: 16,
+              border: 'none', background: '#f5f5f5',
               fontSize: 13, fontWeight: 600, color: '#374151', cursor: 'pointer',
             }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -384,7 +384,7 @@ export default function RestaurantDetailPage() {
               border: 'none', background: 'none', cursor: 'pointer',
               fontSize: 14, fontWeight: 600,
               color: activeTab === tab ? '#111827' : '#9ca3af',
-              borderBottom: activeTab === tab ? '2px solid #111827' : '2px solid transparent',
+              borderBottom: activeTab === tab ? '4px solid #11301d' : '4px solid transparent',
               marginBottom: -1, textTransform: 'capitalize',
             }}
           >
@@ -504,12 +504,7 @@ function SectionHeader({ title, showInfo }: { title: string; showInfo?: boolean 
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 24, marginBottom: 14 }}>
       <span style={{ fontSize: 18, fontWeight: 800, color: '#111827' }}>{title}</span>
       {showInfo && (
-        <button style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, color: '#6b7280', fontSize: 13, fontWeight: 500 }}>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
+        <button style={{ background: '#f5f5f5', border: 'none', borderRadius: 12, cursor: 'pointer', padding: '8px 12px', fontSize: 13, fontWeight: 600, color: '#374151' }}>
           Info
         </button>
       )}
@@ -521,35 +516,36 @@ function SectionHeader({ title, showInfo }: { title: string; showInfo?: boolean 
 function DealCard({ deal }: { deal: Deal }) {
   const router  = useRouter()
   const isLight = deal.bgColor === '#53f293'
-  const txt      = isLight ? '#0a3d1f' : '#ffffff'
-  const txtSub   = isLight ? '#1a5c35' : '#d1fae5'
-  const txtMuted = isLight ? '#1a5c35' : '#86efb2'
-  const chipBg   = isLight ? 'rgba(0,0,0,0.08)'  : 'rgba(255,255,255,0.10)'
-  const chipBdr  = isLight ? 'rgba(0,0,0,0.12)'  : 'rgba(255,255,255,0.15)'
-  const seeReview = isLight ? '#11301d' : '#53f293'
-  const btnBg    = isLight ? '#11301d' : '#0d9488'
+  const txtSub  = isLight ? '#1a5c35' : '#d1fae5'
+  const chipBdr = isLight ? 'rgba(0,0,0,0.1)' : 'rgba(83,242,147,0.2)'
+  const chipClr = isLight ? '#374151' : '#86efb2'
+
+  function tagEmoji(label: string, icon: string) {
+    if (label === 'great taste') return '👌'
+    if (label === 'value/quality') return '🤑'
+    return icon
+  }
 
   return (
-    <div style={{ background: deal.bgColor, borderRadius: 16, padding: 16, marginBottom: 12 }}>
-      {/* Title */}
-      <div style={{ fontSize: 17, fontWeight: 800, color: txt, marginBottom: 10 }}>
-        ⚡ {deal.title}
-      </div>
+    <div style={{ position: 'relative', background: deal.bgColor, borderRadius: 16, padding: 16, marginBottom: 12 }}>
 
-      {/* Avg price + duration chips */}
-      <div style={{ display: 'flex', gap: 6, marginBottom: 10 }}>
-        <span style={{ fontSize: 11, fontWeight: 600, color: txtMuted, background: chipBg, borderRadius: 9999, padding: '3px 8px', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={txtMuted} strokeWidth="2.5" strokeLinecap="round">
-            <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-          </svg>
-          Avg. {deal.avgPrice}
-        </span>
-        <span style={{ fontSize: 11, fontWeight: 600, color: txtMuted, background: chipBg, borderRadius: 9999, padding: '3px 8px', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={txtMuted} strokeWidth="2.5" strokeLinecap="round">
-            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-          </svg>
-          {deal.duration}
-        </span>
+      {/* Ticket punch circles */}
+      <div style={{ position: 'absolute', left: -4, top: 96, width: 8, height: 8, borderRadius: 9999, background: '#ffffff' }} />
+      <div style={{ position: 'absolute', right: -4, top: 96, width: 8, height: 8, borderRadius: 9999, background: '#ffffff' }} />
+
+      {/* ── Header row: title + chips ─────────────────────────────── */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 10 }}>
+        <div style={{ fontSize: 20, fontWeight: 700, color: isLight ? '#0a0a0a' : '#53f293', flex: 1, lineHeight: '26px' }}>
+          ⚡ {deal.title}
+        </div>
+        <div style={{ display: 'flex', gap: 4, flexShrink: 0, marginTop: 2 }}>
+          <span style={{ fontSize: 11, fontWeight: 600, color: chipClr, borderRadius: 9999, padding: '3px 8px', border: `1px solid ${chipBdr}`, display: 'inline-flex', alignItems: 'center' }}>
+            Avg. {deal.avgPrice}
+          </span>
+          <span style={{ fontSize: 11, fontWeight: 600, color: chipClr, borderRadius: 9999, padding: '3px 8px', border: `1px solid ${chipBdr}`, display: 'inline-flex', alignItems: 'center' }}>
+            {deal.duration}
+          </span>
+        </div>
       </div>
 
       {/* Description */}
@@ -557,44 +553,46 @@ function DealCard({ deal }: { deal: Deal }) {
         {deal.description}
       </div>
 
-      {/* Recency counter — core NeoTaste feature */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
-        <span style={{ fontSize: 14 }}>🔥🔥🔥</span>
-        <span style={{ fontSize: 13, fontWeight: 500, color: txtSub }}>
-          Popular this week ·{' '}
-          <span style={{ fontWeight: 800, color: txt }}>{deal.popularCount}</span>
-          {' '}reservations
-        </span>
-      </div>
+      {/* ── Recency block ─────────────────────────────────────────── */}
+      <div style={{ background: '#145b32', borderRadius: 8, padding: '16px 8px', marginBottom: 12 }}>
 
-      {/* Avatars + names + See review */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{ display: 'flex' }}>
-            {deal.users.map((u, i) => (
-              <div key={i} style={{ width: 26, height: 26, borderRadius: 9999, border: '2px solid ' + deal.bgColor, marginLeft: i > 0 ? -8 : 0, overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
-                <Image src={u.src} alt={u.alt} width={26} height={26} style={{ objectFit: 'cover', width: 26, height: 26, borderRadius: 9999 }} />
-              </div>
-            ))}
-          </div>
-          <span style={{ fontSize: 12, fontWeight: 600, color: txtSub }}>{deal.userNames}</span>
-        </div>
-        <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, color: seeReview, textDecoration: 'underline', padding: 0 }}>
-          See review
-        </button>
-      </div>
-
-      {/* Tag chips */}
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 8 }}>
-        {deal.tags.map((tag, i) => (
-          <span key={i} style={{ fontSize: 11, fontWeight: 600, color: txtMuted, background: chipBg, borderRadius: 9999, padding: '3px 8px', border: `1px solid ${chipBdr}` }}>
-            {tag.icon} {tag.label}
+        {/* Fires + popular count */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
+          <span style={{ fontSize: 14 }}>🔥🔥🔥</span>
+          <span style={{ fontSize: 13, fontWeight: 700, color: '#ffffff' }}>
+            Popular this week · <span style={{ fontWeight: 800 }}>{deal.popularCount}</span> reservations
           </span>
-        ))}
+        </div>
+
+        {/* Avatars + names + See review */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ display: 'flex' }}>
+              {deal.users.map((u, i) => (
+                <div key={i} style={{ width: 26, height: 26, borderRadius: 9999, border: '2px solid #145b32', marginLeft: i > 0 ? -8 : 0, overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
+                  <Image src={u.src} alt={u.alt} width={26} height={26} style={{ objectFit: 'cover', width: 26, height: 26, borderRadius: 9999 }} />
+                </div>
+              ))}
+            </div>
+            <span style={{ fontSize: 12, fontWeight: 600, color: '#ffffff' }}>{deal.userNames}</span>
+          </div>
+          <button style={{ background: 'rgba(254,254,254,0.05)', border: 'none', borderRadius: 9999, padding: '5px 10px', fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,0.6)', cursor: 'pointer', flexShrink: 0 }}>
+            See review
+          </button>
+        </div>
+
+        {/* Tag chips */}
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          {deal.tags.map((tag, i) => (
+            <span key={i} style={{ fontSize: 11, fontWeight: 600, color: '#fff592', borderRadius: 40, padding: '4px 10px', border: '1px solid rgba(254,254,254,0.2)' }}>
+              {tagEmoji(tag.label, tag.icon)} {tag.label}
+            </span>
+          ))}
+        </div>
       </div>
 
       {/* Based on N reviews */}
-      <div style={{ fontSize: 11, fontWeight: 500, color: txtMuted, marginBottom: 14 }}>
+      <div style={{ fontSize: 11, fontWeight: 500, color: isLight ? '#1a5c35' : '#86efb2', marginBottom: 14 }}>
         Based on {deal.reviewCount} reviews
       </div>
 
@@ -609,7 +607,7 @@ function DealCard({ deal }: { deal: Deal }) {
       ) : (
         <button
           onClick={() => router.push(`/booking-confirmation/${deal.restaurantId}/${deal.id}`)}
-          style={{ width: '100%', padding: '13px', background: btnBg, borderRadius: 10, border: 'none', fontSize: 14, fontWeight: 700, color: '#ffffff', cursor: 'pointer' }}
+          style={{ width: '100%', padding: '13px', background: 'rgba(83,242,147,0.2)', borderRadius: 10, border: 'none', fontSize: 14, fontWeight: 700, color: '#53f293', cursor: 'pointer' }}
         >
           Book deal
         </button>
