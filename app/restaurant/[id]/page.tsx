@@ -591,11 +591,6 @@ function DealCard({ deal }: { deal: Deal }) {
         </div>
       </div>
 
-      {/* Based on N reviews */}
-      <div style={{ fontSize: 11, fontWeight: 500, color: isLight ? '#1a5c35' : '#86efb2', marginBottom: 14 }}>
-        Based on {deal.reviewCount} reviews
-      </div>
-
       {/* CTA */}
       {deal.booked ? (
         <button
