@@ -560,7 +560,7 @@ function DealCard({ deal }: { deal: Deal }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
           <span style={{ fontSize: 14 }}>🔥🔥🔥</span>
           <span style={{ fontSize: 13, fontWeight: 700, color: '#ffffff' }}>
-            Popular this week · <span style={{ fontWeight: 800 }}>{deal.popularCount}</span> reservations
+            Popular this week
           </span>
         </div>
 
@@ -607,7 +607,7 @@ function DealCard({ deal }: { deal: Deal }) {
       ) : (
         <button
           onClick={() => router.push(`/booking-confirmation/${deal.restaurantId}/${deal.id}`)}
-          style={{ width: '100%', padding: '13px', background: 'rgba(83,242,147,0.2)', borderRadius: 10, border: 'none', fontSize: 14, fontWeight: 700, color: '#53f293', cursor: 'pointer' }}
+          style={{ width: '100%', padding: '13px', background: isLight ? '#11301d' : 'rgba(83,242,147,0.2)', borderRadius: 10, border: 'none', fontSize: 14, fontWeight: 700, color: '#53f293', cursor: 'pointer' }}
         >
           Book deal
         </button>
