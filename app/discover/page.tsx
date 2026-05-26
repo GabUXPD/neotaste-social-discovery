@@ -718,7 +718,7 @@ function BottomSheet({
   return (
     <div
       style={{
-        position: 'absolute', bottom: 85, left: 0, right: 0,
+        position: 'absolute', bottom: 65, left: 0, right: 0,
         background: '#ffffff',
         borderRadius: '20px 20px 0 0',
         boxShadow: '0 -4px 24px rgba(0,0,0,0.12)',
