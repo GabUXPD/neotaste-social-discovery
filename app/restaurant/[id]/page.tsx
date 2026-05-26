@@ -343,7 +343,7 @@ function DealCard({ deal, hasSocial, bookedDealId }: { deal: FullDeal; hasSocial
               ))}
             </div>
             <span style={{ fontSize: 12, fontWeight: 600, color: '#ffffff' }}>
-              {deal.userNames} <span style={{ fontSize: 12, fontWeight: 400 }}>recommend it</span>
+              {deal.userNames} <span style={{ fontSize: 14, fontWeight: 500 }}>recommend it</span>
             </span>
           </div>
         )}
