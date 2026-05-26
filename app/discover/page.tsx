@@ -525,6 +525,8 @@ function BottomSheet({
 function ListItem({ r, isBooked = false }: { r: Restaurant; isBooked?: boolean }) {
   const hasFriends  = r.friends.length > 0
   const hasRecency  = r.recencyCount > 0
+  const [isLiked,   setIsLiked]   = useState(false)
+  const [heartAnim, setHeartAnim] = useState(false)
 
   return (
     <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
@@ -539,8 +541,9 @@ function ListItem({ r, isBooked = false }: { r: Restaurant; isBooked?: boolean }
           fill priority={r.priority} style={{ objectFit: 'cover' }}
         />
         <button
-          onClick={(e) => e.stopPropagation()}
-          className="press-scale"
+          onClick={(e) => { e.stopPropagation(); setIsLiked(!isLiked); setHeartAnim(true) }}
+          onAnimationEnd={() => setHeartAnim(false)}
+          className={heartAnim ? 'animate-heart-pop' : ''}
           style={{
             position: 'absolute', top: 8, right: 8,
             width: 24, height: 24, borderRadius: 9999,
@@ -549,7 +552,7 @@ function ListItem({ r, isBooked = false }: { r: Restaurant; isBooked?: boolean }
             cursor: 'pointer', padding: 0,
           }}
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill={isLiked ? '#f43f5e' : 'none'} stroke={isLiked ? '#f43f5e' : 'rgba(255,255,255,0.9)'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
           </svg>
         </button>

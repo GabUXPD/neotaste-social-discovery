@@ -43,6 +43,8 @@ interface PeekCardProps {
 
 export default function PeekCard({ restaurant, onClose, onViewDetail, isBooked = false }: PeekCardProps) {
   const [showTooltip, setShowTooltip] = useState(false)
+  const [isLiked,     setIsLiked]     = useState(false)
+  const [heartAnim,   setHeartAnim]   = useState(false)
   const hasFriends = restaurant.friends && restaurant.friends.length > 0
   const extraFriends = hasFriends ? Math.max(0, restaurant.friends.length - 2) : 0
   const imgSize = 108
@@ -81,8 +83,9 @@ export default function PeekCard({ restaurant, onClose, onViewDetail, isBooked =
 
         {/* Corazón — esquina superior derecha de la foto */}
         <button
-          onClick={(e) => e.stopPropagation()}
-          className="press-scale"
+          onClick={(e) => { e.stopPropagation(); setIsLiked(!isLiked); setHeartAnim(true) }}
+          onAnimationEnd={() => setHeartAnim(false)}
+          className={heartAnim ? 'animate-heart-pop' : ''}
           style={{
             position: 'absolute', top: 6, right: 6,
             width: 24, height: 24, borderRadius: 9999,
@@ -92,7 +95,7 @@ export default function PeekCard({ restaurant, onClose, onViewDetail, isBooked =
             padding: 0,
           }}
         >
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill={isLiked ? '#f43f5e' : 'none'} stroke={isLiked ? '#f43f5e' : '#6b7280'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
           </svg>
         </button>

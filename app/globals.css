@@ -114,3 +114,13 @@ html, body {
 .press-scale:active {
   transform: scale(0.97);
 }
+
+/* ─── Heart / favourite pop ───────────────────────────────────────────── */
+@keyframes heartPop {
+  0%   { transform: scale(1);    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
+  50%  { transform: scale(1.15); animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+  100% { transform: scale(1.0); }
+}
+.animate-heart-pop {
+  animation: heartPop 200ms forwards;
+}
