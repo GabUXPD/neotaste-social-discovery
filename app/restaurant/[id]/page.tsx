@@ -370,8 +370,9 @@ function ReviewCard({ review }: { review: Review }) {
             {review.tags.map((tag, i) => (
               <span key={i} style={{
                 display: 'inline-flex', alignItems: 'center', gap: 3,
-                background: '#53f293', borderRadius: 9999,
-                padding: '3px 8px', fontSize: 11, fontWeight: 600, color: '#0a0a0a',
+                background: '#ffffff', borderRadius: 9999,
+                border: '1px solid #bafad4',
+                padding: '3px 8px', fontSize: 11, fontWeight: 600, color: '#219750',
               }}>
                 {tagEmoji(tag.label)} {tag.label}
               </span>
