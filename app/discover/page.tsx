@@ -607,16 +607,11 @@ function ListItem({ r, isBooked = false }: { r: Restaurant; isBooked?: boolean }
           <span>{r.distance}</span>
         </div>
 
-        {/* Amigos — señal personal primero */}
-        {hasFriends && (
-          <div style={{ marginBottom: hasRecency ? 4 : 8 }}>
-            <SocialPill friends={r.friends} />
-          </div>
-        )}
-        {/* Recency chip — señal de popularidad */}
-        {hasRecency && (
-          <div style={{ marginBottom: 8 }}>
-            <RecencyChip count={r.recencyCount} fires={r.pin.fires} whyTrending={r.whyTrending} />
+        {/* Recency chip + Social pill */}
+        {(hasRecency || hasFriends) && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8, flexWrap: 'nowrap' }}>
+            {hasRecency && <RecencyChip count={r.recencyCount} fires={r.pin.fires} whyTrending={r.whyTrending} />}
+            {hasFriends && <SocialPill friends={r.friends} />}
           </div>
         )}
 
