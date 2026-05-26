@@ -372,6 +372,7 @@ function TopSection({
       position: 'absolute', top: 0, left: 0, right: 0,
       padding: '48px 16px 0', zIndex: 35,
       display: 'flex', flexDirection: 'column', gap: 16,
+      background: '#ffffff',
     }}>
       {/* Search pill */}
       <div style={{
