@@ -242,7 +242,9 @@ function RestaurantPin({
           {/* Body */}
           <path
             d="M12 0C5.37 0 0 5.37 0 12C0 20.5 12 32 12 32C12 32 24 20.5 24 12C24 5.37 18.63 0 12 0Z"
-            fill={isBooked ? '#145b32' : isSelected ? '#2d9e58' : '#53f293'}
+            fill={isBooked ? '#145b32' : isSelected ? '#11301d' : '#53f293'}
+          stroke={isSelected && !isBooked ? '#ffffff' : 'none'}
+          strokeWidth={isSelected && !isBooked ? '1.5' : '0'}
           />
           {isBooked ? (
             /* Checkmark — booked state */
@@ -318,7 +320,9 @@ function MapPin({ top, left, fires, isSelected, isBooked, onTap }: {
         style={{ display: 'block', filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.30))' }}>
         <path
           d="M12 0C5.37 0 0 5.37 0 12C0 20.5 12 32 12 32C12 32 24 20.5 24 12C24 5.37 18.63 0 12 0Z"
-          fill={isBooked ? '#145b32' : isSelected ? '#2d9e58' : '#53f293'}
+          fill={isBooked ? '#145b32' : isSelected ? '#11301d' : '#53f293'}
+          stroke={isSelected && !isBooked ? '#ffffff' : 'none'}
+          strokeWidth={isSelected && !isBooked ? '1.5' : '0'}
         />
         {isBooked ? (
           <>
@@ -603,11 +607,16 @@ function ListItem({ r, isBooked = false }: { r: Restaurant; isBooked?: boolean }
           <span>{r.distance}</span>
         </div>
 
-        {/* Recency chip + Social pill */}
-        {(hasRecency || hasFriends) && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8, flexWrap: 'nowrap' }}>
-            {hasRecency && <RecencyChip count={r.recencyCount} fires={r.pin.fires} whyTrending={r.whyTrending} />}
-            {hasFriends && <SocialPill friends={r.friends} />}
+        {/* Amigos — señal personal primero */}
+        {hasFriends && (
+          <div style={{ marginBottom: hasRecency ? 4 : 8 }}>
+            <SocialPill friends={r.friends} />
+          </div>
+        )}
+        {/* Recency chip — señal de popularidad */}
+        {hasRecency && (
+          <div style={{ marginBottom: 8 }}>
+            <RecencyChip count={r.recencyCount} fires={r.pin.fires} whyTrending={r.whyTrending} />
           </div>
         )}
 
