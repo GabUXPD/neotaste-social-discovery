@@ -22,6 +22,7 @@ export interface Review {
   name: string; avatar: string; isInitial: boolean; initial: string
   bgColor: string; rating: number; date: string; text: string
   photos: string[]; likes: number
+  tags?: { icon: string; label: string }[]
 }
 export interface SimilarRestaurant {
   id: string; name: string; photo: string; redemptions: string
@@ -62,6 +63,7 @@ export interface Restaurant {
 const tungAnh: Review = {
   name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
   rating: 2, date: '1 week ago', text: 'War super lecker', photos: [], likes: 4,
+  tags: [{ icon: '👌', label: 'great taste' }],
 }
 
 /* ─── Data ───────────────────────────────────────────────────────────────── */
@@ -116,6 +118,7 @@ export const RESTAURANTS: Restaurant[] = [
         rating: 5, date: '3 weeks ago',
         text: 'Such a cozy café! The free cake deal is so generous. The lemon tart is absolutely divine. Will become a regular here.',
         photos: ['/images/postres.jpg', '/images/postresCafe.jpg'], likes: 8,
+        tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
       tungAnh,
     ],
@@ -172,6 +175,7 @@ export const RESTAURANTS: Restaurant[] = [
         rating: 5, date: '3 weeks ago',
         text: 'Best coffee in HafenCity! The deal makes it even more affordable. Love the harbour view and the vibe. Absolutely coming back every weekend.',
         photos: ['/images/coffe.jpg', '/images/cafelocal2.jpg'], likes: 14,
+        tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
       tungAnh,
     ],
@@ -231,6 +235,7 @@ export const RESTAURANTS: Restaurant[] = [
         rating: 5, date: '2 weeks ago',
         text: 'Love the unique camping atmosphere inside a historic building. The coffee is excellent and the 2for1 deal makes it a must-visit every morning!',
         photos: ['/images/Cafe7.jpg', '/images/cafelocal2.jpg'], likes: 11,
+        tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
       tungAnh,
     ],
@@ -286,6 +291,7 @@ export const RESTAURANTS: Restaurant[] = [
         rating: 5, date: '3 weeks ago',
         text: 'Best smash burger in Hamburg! The 2for1 deal is incredible value. Crispy edges, juicy patty, perfectly toasted bun. Will definitely return.',
         photos: ['/images/burger3.jpg', '/images/burgercoke.jpg'], likes: 16,
+        tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
       tungAnh,
     ],
@@ -341,6 +347,7 @@ export const RESTAURANTS: Restaurant[] = [
         rating: 5, date: '3 weeks ago',
         text: 'Absolutely divine pasta! The deal is incredible value. Romantic atmosphere perfect for date night. Will definitely return.',
         photos: ['/images/pazzas.jpg', '/images/pastasPlato.jpg'], likes: 22,
+        tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
       tungAnh,
     ],
@@ -387,6 +394,7 @@ export const RESTAURANTS: Restaurant[] = [
         rating: 5, date: '3 weeks ago',
         text: 'Best salad bar in town! Fresh ingredients, great variety. The bowl + drink deal is perfect for a quick healthy weekday lunch.',
         photos: ['/images/saladplato.jpg', '/images/platovegetariano.jpg'], likes: 9,
+        tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
       tungAnh,
     ],
@@ -442,6 +450,7 @@ export const RESTAURANTS: Restaurant[] = [
         rating: 5, date: '2 weeks ago',
         text: 'The best brunch spot in Eppendorf! Pancakes are fluffy and generous, coffee is great. The 2for1 deal is a steal.',
         photos: ['/images/buerger2.jpg', '/images/burgercoke.jpg'], likes: 13,
+        tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
       tungAnh,
     ],
@@ -497,6 +506,7 @@ export const RESTAURANTS: Restaurant[] = [
         rating: 5, date: '1 week ago',
         text: 'Authentic sushi experience in Hamburg. The salmon and tuna rolls are exceptional. 2for1 deal makes it very accessible for a special night out.',
         photos: ['/images/pastas2.jpg', '/images/pastasPlato.jpg'], likes: 19,
+        tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
       tungAnh,
     ],
@@ -553,6 +563,7 @@ export const RESTAURANTS: Restaurant[] = [
         rating: 5, date: '4 days ago',
         text: 'Closest thing to real Mexican street food in Hamburg. The carnitas taco deal is insane value. Goes perfectly with their horchata.',
         photos: ['/images/burger.jpg', '/images/burgercoke.jpg'], likes: 17,
+        tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
       tungAnh,
     ],
@@ -599,6 +610,7 @@ export const RESTAURANTS: Restaurant[] = [
         rating: 4, date: '2 weeks ago',
         text: 'Great plant-based option in Barmbek. The bowls are filling and flavourful. 15% deal makes it my go-to weekday lunch.',
         photos: ['/images/salads.jpg', '/images/platovegetariano.jpg'], likes: 7,
+        tags: [{ icon: '👌', label: 'great taste' }],
       },
       tungAnh,
     ],
@@ -655,6 +667,7 @@ export const RESTAURANTS: Restaurant[] = [
         rating: 5, date: '5 days ago',
         text: 'The best after-work spot in Altona. Big outdoor garden, great beer selection and the 2for1 deal is perfect to share with colleagues.',
         photos: ['/images/cafeLocal.jpg', '/images/cafelocal2.jpg'], likes: 21,
+        tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
       tungAnh,
     ],
@@ -710,6 +723,7 @@ export const RESTAURANTS: Restaurant[] = [
         rating: 5, date: '1 week ago',
         text: 'Authentic Neapolitan pizza in Hamburg. The dough is incredible and the 2for1 deal means I can try two styles every visit. Love it.',
         photos: ['/images/pastasPlato.jpg', '/images/pazzas.jpg'], likes: 15,
+        tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
       tungAnh,
     ],
@@ -769,6 +783,7 @@ export const RESTAURANTS: Restaurant[] = [
         rating: 5, date: '3 days ago',
         text: 'The best dim sum outside of Hong Kong! The har gow wrappers are perfectly thin and the filling is generous. 2for1 deal on weekends is unmissable.',
         photos: ['/images/cafelocal2.jpg', '/images/cafeLocal.jpg'], likes: 31,
+        tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
       tungAnh,
     ],
@@ -824,6 +839,7 @@ export const RESTAURANTS: Restaurant[] = [
         rating: 5, date: '10 days ago',
         text: 'Most authentic Indian food in Hamburg. The spice blends are spot on and the 2for1 curry deal is exceptional value. Butter chicken is a must.',
         photos: ['/images/Cafe7.jpg', '/images/cafelocal2.jpg'], likes: 18,
+        tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
       tungAnh,
     ],
@@ -879,6 +895,7 @@ export const RESTAURANTS: Restaurant[] = [
         rating: 5, date: '1 week ago',
         text: 'Finally a proper French bakery in Hamburg! The croissants are perfectly laminated, flaky outside and buttery soft inside. 2for1 is a dream.',
         photos: ['/images/cafe2.jpg', '/images/cafeLocal.jpg'], likes: 12,
+        tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
       tungAnh,
     ],
@@ -934,6 +951,7 @@ export const RESTAURANTS: Restaurant[] = [
         rating: 5, date: '2 days ago',
         text: 'The tonkotsu broth here is extraordinary — 18 hours of slow cooking really shows. The 2for1 deal means I come twice a week. Best ramen in Hamburg.',
         photos: ['/images/pastasPlato.jpg', '/images/pastas2.jpg'], likes: 24,
+        tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
       tungAnh,
     ],

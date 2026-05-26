@@ -134,7 +134,7 @@ export default function RestaurantDetailPage() {
             <SectionHeader title="Reviews" />
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
               <span style={{ fontSize: 40, fontWeight: 800, color: '#111827', lineHeight: 1 }}>{detail.rating}</span>
-              <StarRating rating={5} size={22} />
+              <StarRating rating={Math.round(detail.rating)} size={22} />
             </div>
             {detail.reviewsList.map((review, i) => <ReviewCard key={i} review={review} />)}
             <button style={{
@@ -344,26 +344,45 @@ function DealCard({ deal }: { deal: FullDeal }) {
 
 /* ─── Review Card ────────────────────────────────────────────────────── */
 function ReviewCard({ review }: { review: Review }) {
+  function tagEmoji(label: string) {
+    if (label === 'great taste')   return '👌'
+    if (label === 'value/quality') return '💯'
+    return '✓'
+  }
   return (
     <div style={{ marginBottom: 20 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-        {/* Avatar — photo or initial */}
-        {review.isInitial ? (
-          <div style={{ width: 36, height: 36, borderRadius: 9999, background: review.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <span style={{ fontSize: 15, fontWeight: 700, color: '#ffffff' }}>{review.initial}</span>
-          </div>
-        ) : (
-          <div style={{ width: 36, height: 36, borderRadius: 9999, overflow: 'hidden', flexShrink: 0, position: 'relative' }}>
-            <Image src={review.avatar} alt={review.name} width={36} height={36} style={{ objectFit: 'cover', width: 36, height: 36, borderRadius: 9999 }} />
+      {/* Row 1: avatar + name | tag chips */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 4 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {review.isInitial ? (
+            <div style={{ width: 36, height: 36, borderRadius: 9999, background: review.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <span style={{ fontSize: 15, fontWeight: 700, color: '#ffffff' }}>{review.initial}</span>
+            </div>
+          ) : (
+            <div style={{ width: 36, height: 36, borderRadius: 9999, overflow: 'hidden', flexShrink: 0, position: 'relative' }}>
+              <Image src={review.avatar} alt={review.name} width={36} height={36} style={{ objectFit: 'cover', width: 36, height: 36, borderRadius: 9999 }} />
+            </div>
+          )}
+          <div style={{ fontSize: 14, fontWeight: 700, color: '#111827' }}>{review.name}</div>
+        </div>
+        {review.tags && review.tags.length > 0 && (
+          <div style={{ display: 'flex', gap: 4, flexShrink: 0, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+            {review.tags.map((tag, i) => (
+              <span key={i} style={{
+                display: 'inline-flex', alignItems: 'center', gap: 3,
+                background: '#53f293', borderRadius: 9999,
+                padding: '3px 8px', fontSize: 11, fontWeight: 600, color: '#0a0a0a',
+              }}>
+                {tagEmoji(tag.label)} {tag.label}
+              </span>
+            ))}
           </div>
         )}
-        <div>
-          <div style={{ fontSize: 14, fontWeight: 700, color: '#111827' }}>{review.name}</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-            <StarRating rating={review.rating} size={12} />
-            <span style={{ fontSize: 11, color: '#9ca3af' }}>· {review.date}</span>
-          </div>
-        </div>
+      </div>
+      {/* Row 2: stars + date */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 8, paddingLeft: 46 }}>
+        <StarRating rating={review.rating} size={12} />
+        <span style={{ fontSize: 11, color: '#9ca3af' }}>· {review.date}</span>
       </div>
 
       <div style={{ fontSize: 13, color: '#374151', lineHeight: 1.6, marginBottom: review.photos.length ? 10 : 8 }}>
@@ -395,7 +414,7 @@ function StarRating({ rating, size = 16 }: { rating: number; size?: number }) {
   return (
     <div style={{ display: 'flex', gap: 1 }}>
       {[1, 2, 3, 4, 5].map((i) => (
-        <svg key={i} width={size} height={size} viewBox="0 0 24 24" fill={i <= rating ? '#fbbf24' : '#e5e7eb'} stroke="none">
+        <svg key={i} width={size} height={size} viewBox="0 0 24 24" fill={i <= rating ? '#11301d' : '#e5e7eb'} stroke="none">
           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
         </svg>
       ))}
