@@ -181,7 +181,7 @@ function MapBackground() {
     <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
       <iframe
         src="https://www.openstreetmap.org/export/embed.html?bbox=9.950%2C53.538%2C10.010%2C53.575&layer=mapnik"
-        style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+        style={{ width: '100%', height: '100%', border: 'none', display: 'block', filter: 'grayscale(1)' }}
         loading="eager"
         title="NeoTaste Map"
         allowFullScreen
