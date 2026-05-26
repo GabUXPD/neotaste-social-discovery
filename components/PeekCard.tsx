@@ -10,26 +10,28 @@ interface Friend {
 
 interface Deal {
   label: string
-  discount: string
+}
+
+interface WhyTrending {
+  returnRate: string
+  topOccasion: string
+  peakTime: string
 }
 
 interface Restaurant {
   id: string
   name: string
-  cuisine: string
+  categories: string
   rating: number
   reviews: number
   distance: string
   recencyCount: number
   image: string
-  booked?: boolean
-  friends?: Friend[]
+  friends: Friend[]
   deals: Deal[]
-  whyTrending?: {
-    returnRate: string
-    topOccasion: string
-    peakTime: string
-  }
+  whyTrending?: WhyTrending
+  pin: { top: string; left: string; fires: number }
+  priceLevel: number
 }
 
 interface PeekCardProps {
@@ -41,9 +43,8 @@ interface PeekCardProps {
 export default function PeekCard({ restaurant, onClose, onViewDetail }: PeekCardProps) {
   const [showTooltip, setShowTooltip] = useState(false)
   const hasFriends = restaurant.friends && restaurant.friends.length > 0
-  const extraFriends = hasFriends ? Math.max(0, restaurant.friends!.length - 2) : 0
-  const isBooked = restaurant.booked === true
-  const imgSize = isBooked ? 108 : 88
+  const extraFriends = hasFriends ? Math.max(0, restaurant.friends.length - 2) : 0
+  const imgSize = 108
 
   return (
     /* Compact horizontal card — no backdrop, map stays visible */
@@ -62,7 +63,7 @@ export default function PeekCard({ restaurant, onClose, onViewDetail }: PeekCard
         alignItems: 'flex-start',
         zIndex: 50,
         boxShadow: '0 4px 24px rgba(0,0,0,0.14)',
-        border: isBooked ? '1px solid #d4d4d4' : 'none',
+        border: '1px solid #d4d4d4',
       }}
       onClick={onViewDetail}
     >
@@ -98,26 +99,19 @@ export default function PeekCard({ restaurant, onClose, onViewDetail }: PeekCard
       {/* ── Info ──────────────────────────────────────────────────────── */}
       <div style={{ flex: 1, minWidth: 0 }}>
 
-        {/* Nombre + Booked badge */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 2 }}>
-          <div style={{ fontSize: 14, fontWeight: 600, color: '#0a0a0a', lineHeight: '18px' }}>
-            {restaurant.name}
-          </div>
-          {/* Booked badge */}
-          {isBooked && (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, flexShrink: 0, marginLeft: 8 }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#53f293" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="3" ry="3"/>
-                <polyline points="9 11 12 14 22 4"/>
-              </svg>
-              <span style={{ fontSize: 10, fontWeight: 500, color: '#145b32', lineHeight: '12px' }}>Booked</span>
-            </div>
-          )}
+        {/* Nombre */}
+        <div style={{ fontSize: 14, fontWeight: 600, color: '#0a0a0a', lineHeight: '18px', marginBottom: 2 }}>
+          {restaurant.name}
         </div>
 
-        {/* Categoría */}
-        <div style={{ fontSize: 12, fontWeight: 500, color: '#737373', marginBottom: 3 }}>
-          {restaurant.cuisine}
+        {/* Categorías + precio */}
+        <div style={{ fontSize: 12, fontWeight: 500, color: '#737373', marginBottom: 3, display: 'flex', alignItems: 'center', gap: 4 }}>
+          <span>{restaurant.categories}</span>
+          <span style={{ width: 2, height: 2, borderRadius: 9999, background: '#737373', flexShrink: 0, display: 'inline-block' }} />
+          <span style={{ fontWeight: 500, fontSize: 12, color: '#0a0a0a' }}>
+            <span>{'€'.repeat(restaurant.priceLevel)}</span>
+            <span style={{ color: 'rgba(0,0,0,0.5)' }}>{'€'.repeat(4 - restaurant.priceLevel)}</span>
+          </span>
         </div>
 
         {/* Rating + distancia */}
@@ -125,41 +119,35 @@ export default function PeekCard({ restaurant, onClose, onViewDetail }: PeekCard
           ⭐ {restaurant.rating} ({restaurant.reviews}) · {restaurant.distance}
         </div>
 
-        {/* Fila: recency chip + avatars de amigos */}
+        {/* Recency chip + amigos */}
         {restaurant.recencyCount >= 5 && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8, flexWrap: 'nowrap' }}>
-
-            {/* Chip recency con caret-down */}
-            <div style={{ position: 'relative' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 8, flexWrap: 'nowrap' }}>
+            <div style={{ position: 'relative', flexShrink: 0 }}>
               <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setShowTooltip(!showTooltip)
-                }}
+                onClick={(e) => { e.stopPropagation(); setShowTooltip(!showTooltip) }}
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 4,
-                  background: isBooked ? '#fffbc2' : '#ffe645', borderRadius: 9999,
+                  background: showTooltip ? '#ffe645' : '#fffbc2', borderRadius: 9999,
                   padding: '4px 8px', border: 'none', cursor: 'pointer',
-                  flexShrink: 0,
                 }}
               >
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 0 }}>
-                  <span style={{ fontSize: 12, lineHeight: 1 }}>🔥</span>
-                  <span style={{ fontSize: 12, lineHeight: 1 }}>🔥</span>
+                {/* Fire emojis with -5px overlap per Figma node 100-5411 */}
+                <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                  {Array.from({ length: Math.max(1, restaurant.pin.fires) }).map((_, i, arr) => (
+                    <span key={i} style={{ fontSize: 11, lineHeight: 1, marginRight: i < arr.length - 1 ? -5 : 0 }}>🔥</span>
+                  ))}
                 </span>
-                <span style={{ fontSize: 10, fontWeight: 700, color: '#0a0a0a', whiteSpace: 'nowrap' }}>
+                <span style={{ fontSize: 12, fontWeight: 600, color: '#0a0a0a', whiteSpace: 'nowrap' }}>
                   {restaurant.recencyCount} booked this week
                 </span>
-                {/* Caret-down */}
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="2.5" strokeLinecap="round">
                   <path d="M6 9l6 6 6-6"/>
                 </svg>
               </button>
 
-              {/* Tooltip "Why it's trending" — diseño frame 104:4478 */}
               {showTooltip && restaurant.whyTrending && (
                 <div
-                  className="animate-scale-in"
+                  onClick={(e) => e.stopPropagation()}
                   style={{
                     position: 'absolute', top: 'calc(100% + 6px)', left: 0,
                     background: '#11301d', borderRadius: 12, padding: '12px 14px',
@@ -167,18 +155,13 @@ export default function PeekCard({ restaurant, onClose, onViewDetail }: PeekCard
                     boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
                   }}
                 >
-                  {/* Flecha hacia arriba */}
                   <div style={{
                     position: 'absolute', top: -5, left: 16,
                     width: 10, height: 10, background: '#11301d',
                     transform: 'rotate(45deg)', borderRadius: 2,
                   }} />
-
-                  {/* Fila 1: título + botón cerrar */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: '#53f293' }}>
-                      Why it&apos;s trending
-                    </span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: '#ffe645' }}>Why it&apos;s trending</span>
                     <button
                       onClick={(e) => { e.stopPropagation(); setShowTooltip(false) }}
                       style={{
@@ -193,59 +176,39 @@ export default function PeekCard({ restaurant, onClose, onViewDetail }: PeekCard
                       </svg>
                     </button>
                   </div>
-
-                  {/* Fila 2: subtítulo */}
                   <div style={{ fontSize: 11, fontWeight: 500, color: '#ffffff', marginBottom: 10 }}>
                     Popular in your neighborhood
                   </div>
-
-                  {/* Fila 3: métricas */}
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 16 }}>
                     <div>
-                      <span style={{ fontSize: 18, fontWeight: 700, color: '#ffffff' }}>
-                        {restaurant.recencyCount}
-                      </span>
-                      <span style={{ fontSize: 10, fontWeight: 500, color: '#86efb2', marginLeft: 4 }}>
-                        Booked this week
-                      </span>
+                      <span style={{ fontSize: 18, fontWeight: 700, color: '#ffffff' }}>{restaurant.recencyCount}</span>
+                      <span style={{ fontSize: 10, fontWeight: 500, color: '#86efb2', marginLeft: 4 }}>Booked this</span>
                     </div>
                     <div>
-                      <span style={{ fontSize: 18, fontWeight: 700, color: '#53f293' }}>
-                        {restaurant.whyTrending.returnRate}
-                      </span>
-                      <span style={{ fontSize: 10, fontWeight: 500, color: '#86efb2', marginLeft: 4 }}>
-                        Growth
-                      </span>
+                      <span style={{ fontSize: 18, fontWeight: 700, color: '#53f293' }}>{restaurant.whyTrending.returnRate}</span>
+                      <span style={{ fontSize: 10, fontWeight: 500, color: '#86efb2', marginLeft: 4 }}>Growth</span>
                     </div>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Avatars de amigos — solo si hay amigos */}
             {hasFriends && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
-                {/* Stack de avatares (máx 2 visibles) */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
                 <div style={{ display: 'flex' }}>
-                  {restaurant.friends!.slice(0, 2).map((f, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        width: 22, height: 22, borderRadius: 9999,
-                        border: '2px solid #ffffff',
-                        marginLeft: i > 0 ? -7 : 0,
-                        overflow: 'hidden', position: 'relative', flexShrink: 0,
-                      }}
-                    >
-                      <Image src={f.src} alt={f.alt} width={22} height={22} priority style={{ objectFit: 'cover', width: 22, height: 22, borderRadius: 9999 }} />
+                  {restaurant.friends.slice(0, 2).map((f, i) => (
+                    <div key={i} style={{
+                      width: 24, height: 24, borderRadius: 9999,
+                      border: '2px solid #ffffff',
+                      marginLeft: i > 0 ? -8 : 0,
+                      overflow: 'hidden', position: 'relative', flexShrink: 0,
+                    }}>
+                      <Image src={f.src} alt={f.alt} width={24} height={24} priority style={{ objectFit: 'cover', width: 24, height: 24, borderRadius: 9999 }} />
                     </div>
                   ))}
                 </div>
-                {/* +N contador */}
                 {extraFriends > 0 && (
-                  <span style={{ fontSize: 11, fontWeight: 700, color: '#6b7280' }}>
-                    +{extraFriends}
-                  </span>
+                  <span style={{ fontSize: 12, fontWeight: 600, color: '#08180f' }}>+{extraFriends}</span>
                 )}
               </div>
             )}
@@ -265,8 +228,8 @@ export default function PeekCard({ restaurant, onClose, onViewDetail }: PeekCard
                   borderRadius: 9999, padding: '4px 10px', flexShrink: 0,
                 }}
               >
-                <span style={{ fontSize: 11, fontWeight: 700, color: '#0a0a0a' }}>
-                  {deal.discount} {deal.label}
+                <span style={{ fontSize: 12, fontWeight: 600, color: '#0a0a0a' }}>
+                  {deal.label}
                 </span>
               </div>
             ))}
