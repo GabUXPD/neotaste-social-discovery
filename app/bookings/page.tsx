@@ -1,10 +1,23 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
+import { Suspense } from 'react'
+import { RESTAURANT_MAP } from '@/lib/restaurants'
 
-export default function BookingsPage() {
-  const router = useRouter()
+/* ─── Inner component (needs useSearchParams inside Suspense) ─────────── */
+function BookingsContent() {
+  const router       = useRouter()
+  const searchParams = useSearchParams()
+  const restaurantId = searchParams.get('restaurantId') ?? 'r2'
+  const dealId       = searchParams.get('dealId')       ?? 'd1'
+
+  const restaurant = RESTAURANT_MAP[restaurantId]
+  const deal       = restaurant?.fullDeals.find((d) => d.id === dealId)
+
+  const restaurantName = restaurant?.name  ?? "Capo's Coffee Hafencity"
+  const heroImage      = restaurant?.image ?? '/images/cafeLocal.jpg'
+  const dealTitle      = deal?.title       ?? '2for1 Coffee-Dessert Bundle'
 
   return (
     <div style={{
@@ -31,18 +44,17 @@ export default function BookingsPage() {
         Bookings
       </h1>
 
-      {/* ── CONTENT TABS ───────────────────────────────────────────────── */}
+      {/* ── TABS ───────────────────────────────────────────────────────── */}
       <div style={{
         display: 'flex',
         borderBottom: '1px solid rgba(0,0,0,0.1)',
         marginTop: 12,
         paddingLeft: 16,
       }}>
-        {/* Upcoming — active */}
         <div style={{
           padding: '16px 0',
           marginRight: 16,
-          borderBottom: '3px solid #11301d',
+          borderBottom: '4px solid #11301d',
           fontSize: 14,
           fontWeight: 600,
           color: '#0a0a0a',
@@ -51,7 +63,6 @@ export default function BookingsPage() {
         }}>
           Upcoming
         </div>
-        {/* History — inactive */}
         <div style={{
           padding: '16px 0',
           fontSize: 14,
@@ -79,8 +90,8 @@ export default function BookingsPage() {
         {/* Hero image */}
         <div style={{ position: 'relative', height: 164, borderRadius: 24, overflow: 'hidden', flexShrink: 0 }}>
           <Image
-            src="/images/postres.jpg"
-            alt="Capo's Coffee Hafencity"
+            src={heroImage}
+            alt={restaurantName}
             fill
             style={{ objectFit: 'cover' }}
             sizes="390px"
@@ -94,13 +105,11 @@ export default function BookingsPage() {
           {/* Name + subtitle row */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <div style={{ fontSize: 24, fontWeight: 700, color: '#0a0a0a', lineHeight: '30px' }}>
-              Capo&apos;s Coffee Hafencity
+              {restaurantName}
             </div>
-
-            {/* Deal · dot · Time + chevron */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-              <span style={{ fontSize: 14, fontWeight: 500, color: 'rgba(0,0,0,0.7)', whiteSpace: 'nowrap' }}>
-                2for1 Coffee-Dessert...
+              <span style={{ fontSize: 14, fontWeight: 500, color: 'rgba(0,0,0,0.7)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 140 }}>
+                {dealTitle}
               </span>
               <div style={{ width: 2, height: 2, borderRadius: 9999, background: 'rgba(0,0,0,0.4)', flexShrink: 0 }} />
               <span style={{ fontSize: 14, fontWeight: 500, color: 'rgba(0,0,0,0.7)', whiteSpace: 'nowrap' }}>
@@ -116,7 +125,7 @@ export default function BookingsPage() {
           <div style={{ height: 1, background: 'rgba(0,0,0,0.05)' }} />
 
           {/* ── 4 Action buttons ─────────────────────────────────────── */}
-          <div style={{ display: 'flex', gap: 4 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 4px' }}>
 
             {/* Location */}
             <button style={{
@@ -124,9 +133,8 @@ export default function BookingsPage() {
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               gap: 4,
               background: '#f5f5f5', border: 'none', borderRadius: 12,
-              padding: '8px 4px', cursor: 'pointer',
+              padding: '8px 12px', cursor: 'pointer',
             }}>
-              {/* Signpost icon */}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M3 6h13l4 4-4 4H3V6z"/>
                 <path d="M21 18H8l-4-4 4-4"/>
@@ -142,9 +150,8 @@ export default function BookingsPage() {
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               gap: 4,
               background: '#f5f5f5', border: 'none', borderRadius: 12,
-              padding: '8px 4px', cursor: 'pointer',
+              padding: '8px 12px', cursor: 'pointer',
             }}>
-              {/* Arrow up from bracket */}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                 <polyline points="17 8 12 3 7 8"/>
@@ -159,10 +166,9 @@ export default function BookingsPage() {
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               gap: 4,
               background: '#f5f5f5', border: 'none', borderRadius: 12,
-              padding: '8px 4px', cursor: 'pointer',
+              padding: '8px 12px', cursor: 'pointer',
               opacity: 0.8,
             }}>
-              {/* Ban / circle with slash */}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10"/>
                 <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
@@ -170,18 +176,19 @@ export default function BookingsPage() {
               <span style={{ fontSize: 12, fontWeight: 600, color: '#0a0a0a', lineHeight: '16px' }}>Cancel</span>
             </button>
 
-            {/* Support */}
+            {/* Support — service bell */}
             <button style={{
               flex: '1 0 0', minWidth: 0,
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               gap: 4,
               background: '#f5f5f5', border: 'none', borderRadius: 12,
-              padding: '8px 4px', cursor: 'pointer',
+              padding: '8px 12px', cursor: 'pointer',
             }}>
-              {/* Service bell */}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                <path d="M18 11a6 6 0 0 0-12 0"/>
+                <line x1="4" y1="11" x2="20" y2="11"/>
+                <line x1="2" y1="15" x2="22" y2="15"/>
+                <line x1="12" y1="3" x2="12" y2="5"/>
               </svg>
               <span style={{ fontSize: 12, fontWeight: 600, color: '#0a0a0a', lineHeight: '16px' }}>Support</span>
             </button>
@@ -225,14 +232,7 @@ export default function BookingsPage() {
         padding: '6px 25px 25px',
         zIndex: 40,
       }}>
-
-        {/* Home */}
-        <button onClick={() => router.push('/')} style={{
-          flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1,
-          background: 'none', border: 'none', borderRadius: 100,
-          paddingTop: 6, paddingBottom: 7, paddingLeft: 8, paddingRight: 8,
-          cursor: 'pointer', opacity: 0.5,
-        }}>
+        <button onClick={() => router.push('/')} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, background: 'none', border: 'none', borderRadius: 100, paddingTop: 6, paddingBottom: 7, paddingLeft: 8, paddingRight: 8, cursor: 'pointer', opacity: 0.5 }}>
           <div style={{ height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -242,13 +242,7 @@ export default function BookingsPage() {
           <span style={{ fontSize: 10, fontWeight: 500, color: '#0a0a0a', lineHeight: '12px' }}>Home</span>
         </button>
 
-        {/* Feed */}
-        <button onClick={() => router.push('/')} style={{
-          flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1,
-          background: 'none', border: 'none', borderRadius: 100,
-          paddingTop: 6, paddingBottom: 7, paddingLeft: 8, paddingRight: 8,
-          cursor: 'pointer', opacity: 0.5,
-        }}>
+        <button onClick={() => router.push('/')} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, background: 'none', border: 'none', borderRadius: 100, paddingTop: 6, paddingBottom: 7, paddingLeft: 8, paddingRight: 8, cursor: 'pointer', opacity: 0.5 }}>
           <div style={{ height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10"/>
@@ -258,13 +252,7 @@ export default function BookingsPage() {
           <span style={{ fontSize: 10, fontWeight: 500, color: '#0a0a0a', lineHeight: '12px' }}>Feed</span>
         </button>
 
-        {/* Discover */}
-        <button onClick={() => router.push('/discover')} style={{
-          flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1,
-          background: 'none', border: 'none', borderRadius: 100,
-          paddingTop: 6, paddingBottom: 7, paddingLeft: 8, paddingRight: 8,
-          cursor: 'pointer', opacity: 0.5,
-        }}>
+        <button onClick={() => router.push('/discover')} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, background: 'none', border: 'none', borderRadius: 100, paddingTop: 6, paddingBottom: 7, paddingLeft: 8, paddingRight: 8, cursor: 'pointer', opacity: 0.5 }}>
           <div style={{ height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
@@ -274,13 +262,7 @@ export default function BookingsPage() {
           <span style={{ fontSize: 10, fontWeight: 500, color: '#0a0a0a', lineHeight: '12px' }}>Discover</span>
         </button>
 
-        {/* Bookings — active */}
-        <button onClick={() => router.push('/bookings')} style={{
-          flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1,
-          background: 'rgba(0,0,0,0.05)', border: 'none', borderRadius: 100,
-          paddingTop: 6, paddingBottom: 7, paddingLeft: 8, paddingRight: 8,
-          cursor: 'pointer', opacity: 1,
-        }}>
+        <button onClick={() => router.push('/bookings')} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, background: 'rgba(0,0,0,0.05)', border: 'none', borderRadius: 100, paddingTop: 6, paddingBottom: 7, paddingLeft: 8, paddingRight: 8, cursor: 'pointer', opacity: 1 }}>
           <div style={{ height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="3" width="18" height="18" rx="3" ry="3"/>
@@ -290,13 +272,7 @@ export default function BookingsPage() {
           <span style={{ fontSize: 10, fontWeight: 500, color: '#0a0a0a', lineHeight: '12px' }}>Bookings</span>
         </button>
 
-        {/* Profile */}
-        <button onClick={() => router.push('/')} style={{
-          flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1,
-          background: 'none', border: 'none', borderRadius: 100,
-          paddingTop: 6, paddingBottom: 7, paddingLeft: 8, paddingRight: 8,
-          cursor: 'pointer', opacity: 0.5,
-        }}>
+        <button onClick={() => router.push('/')} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, background: 'none', border: 'none', borderRadius: 100, paddingTop: 6, paddingBottom: 7, paddingLeft: 8, paddingRight: 8, cursor: 'pointer', opacity: 0.5 }}>
           <div style={{ height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -305,8 +281,16 @@ export default function BookingsPage() {
           </div>
           <span style={{ fontSize: 10, fontWeight: 500, color: '#0a0a0a', lineHeight: '12px' }}>Profile</span>
         </button>
-
       </div>
     </div>
+  )
+}
+
+/* ─── Page wrapper con Suspense (requerido por useSearchParams) ──────── */
+export default function BookingsPage() {
+  return (
+    <Suspense fallback={<div style={{ background: '#fefefe', minHeight: '100dvh' }} />}>
+      <BookingsContent />
+    </Suspense>
   )
 }

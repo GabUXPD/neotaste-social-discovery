@@ -213,7 +213,7 @@ export default function BookingConfirmationPage() {
 
         {/* See my bookings */}
         <button
-          onClick={() => router.push('/bookings')}
+          onClick={() => router.push(`/bookings?restaurantId=${restaurantId}&dealId=${dealId}`)}
           style={{
             width: '100%', padding: '15px',
             background: '#f5f5f5', borderRadius: 16, border: 'none',
