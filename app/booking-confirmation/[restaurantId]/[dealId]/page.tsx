@@ -2,39 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
-
-/* ─── Lookup data ─────────────────────────────────────────────────────── */
-const RESTAURANTS: Record<string, { name: string; address: string; image: string }> = {
-  r1: { name: 'Brava Burger Co.',       address: 'Schulterblatt 58, 22769 Hamburg',          image: '/images/burger.jpg' },
-  r2: { name: 'Café Moderno',           address: 'Eppendorfer Weg 15, 20259 Hamburg',         image: '/images/cafeLocal.jpg' },
-  r3: { name: 'Pasta & Alma',           address: 'Mittelweg 45, 20149 Hamburg',               image: '/images/pastasPlato.jpg' },
-  r4: { name: 'Verde Saladbar',         address: 'Grindelallee 32, 20146 Hamburg',            image: '/images/salads.jpg' },
-  r5: { name: 'La Brasa',              address: 'Bahrenfelder Chaussee 12, 22761 Hamburg',   image: '/images/platoCarne.jpg' },
-  r6: { name: "Dude's Coffee & Cake",   address: 'Sillemstr. 22, 20257 Hamburg',              image: '/images/postres.jpg' },
-}
-
-const DEALS: Record<string, Record<string, { title: string; benefit: string; duration: string; location: string; description: string }>> = {
-  r1: {
-    d1: { title: '2for1 Burger',    benefit: '14 € benefit', duration: 'Limited',  location: 'on site',        description: 'Order any two smash burgers and pay only for one.' },
-    d2: { title: '20% OFF Beer',    benefit: '6 € benefit',  duration: '30 days',  location: 'on site',        description: 'Get 20% off any craft beer with your meal.' },
-  },
-  r2: {
-    d1: { title: '15% OFF Brunch',  benefit: '18 € benefit', duration: 'Limited',  location: 'on site',        description: 'Get 15% off our full brunch set. Weekends only.' },
-  },
-  r3: {
-    d1: { title: '2for1 Cake',      benefit: '16 € benefit', duration: 'Limited',  location: 'on site & to go', description: 'Order any two coffee and cake combos and pay only for one.' },
-    d2: { title: '25% OFF Wine',    benefit: '28 € benefit', duration: '90 days',  location: 'on site',        description: 'Get 25% off any wine bottle with your pasta dinner.' },
-  },
-  r4: {
-    d1: { title: '10% OFF Bowl',    benefit: '12 € benefit', duration: 'Limited',  location: 'on site & to go', description: 'Get 10% off any power bowl with a drink.' },
-  },
-  r5: {
-    d1: { title: '20% OFF Asado',   benefit: '35 € benefit', duration: 'Limited',  location: 'on site',        description: 'Get 20% off our signature asado menu for two.' },
-  },
-  r6: {
-    d1: { title: '1 FREE Cake',     benefit: '8 € benefit',  duration: '30 days',  location: 'on site & to go', description: 'Get one free cake slice with any coffee order.' },
-  },
-}
+import { RESTAURANT_MAP } from '@/lib/restaurants'
 
 /* ─── Helpers ─────────────────────────────────────────────────────────── */
 function getRedeemDate(): string {
@@ -52,13 +20,13 @@ export default function BookingConfirmationPage() {
   const restaurantId = params.restaurantId as string
   const dealId       = params.dealId as string
 
-  const restaurant = RESTAURANTS[restaurantId]
-  const deal       = DEALS[restaurantId]?.[dealId]
+  const restaurant = RESTAURANT_MAP[restaurantId]
+  const deal       = restaurant?.fullDeals.find((d) => d.id === dealId)
   const redeemDate = getRedeemDate()
 
   if (!restaurant || !deal) {
     return (
-      <div style={{ background: '#0a0a0a', minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ background: '#0d1a12', minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <button onClick={() => router.push('/discover')} style={{ color: '#fff', background: 'none', border: 'none', cursor: 'pointer', fontSize: 16 }}>
           ← Back to discover
         </button>
@@ -68,7 +36,7 @@ export default function BookingConfirmationPage() {
 
   return (
     <div style={{
-      background: '#0a0a0a',
+      background: '#0d1a12',
       minHeight: '100dvh',
       display: 'flex',
       flexDirection: 'column',
@@ -128,14 +96,12 @@ export default function BookingConfirmationPage() {
             boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
             zIndex: 10,
           }}>
-            {/* Calendar icon */}
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0a3d1f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
               <line x1="16" y1="2" x2="16" y2="6"/>
               <line x1="8" y1="2" x2="8" y2="6"/>
               <line x1="3" y1="10" x2="21" y2="10"/>
             </svg>
-            {/* Green checkmark badge */}
             <div style={{
               position: 'absolute',
               bottom: 0, right: 0,
@@ -157,7 +123,7 @@ export default function BookingConfirmationPage() {
 
           {/* Restaurant name + address */}
           <div style={{ marginBottom: 14 }}>
-            <div style={{ fontSize: 18, fontWeight: 800, color: '#111827', marginBottom: 3 }}>
+            <div style={{ fontSize: 24, fontWeight: 700, color: '#262626', marginBottom: 3 }}>
               {restaurant.name}
             </div>
             <div style={{ fontSize: 12, fontWeight: 500, color: '#9ca3af' }}>
@@ -166,9 +132,9 @@ export default function BookingConfirmationPage() {
           </div>
 
           {/* Deal box */}
-          <div style={{ background: '#f3f4f6', borderRadius: 12, padding: '14px 14px 0' }}>
+          <div style={{ background: '#ececec', borderRadius: 12, padding: '14px 14px 0' }}>
             {/* Deal title */}
-            <div style={{ fontSize: 15, fontWeight: 800, color: '#111827', marginBottom: 8 }}>
+            <div style={{ fontSize: 20, fontWeight: 700, color: '#11301d', marginBottom: 8 }}>
               {deal.title}
             </div>
 
@@ -182,11 +148,12 @@ export default function BookingConfirmationPage() {
                   <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
                   <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
                 </svg>
-                {deal.benefit}
+                {deal.avgPrice} benefit
               </span>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600, color: '#6b7280' }}>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round">
-                  <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+                  <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
                 </svg>
                 {deal.duration}
               </span>
@@ -195,7 +162,7 @@ export default function BookingConfirmationPage() {
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                   <circle cx="12" cy="10" r="3"/>
                 </svg>
-                {deal.location}
+                on site & to go
               </span>
             </div>
 
@@ -231,8 +198,8 @@ export default function BookingConfirmationPage() {
         {/* Share with friends */}
         <button style={{
           width: '100%', padding: '15px',
-          background: '#53f293', borderRadius: 9999, border: 'none',
-          fontSize: 15, fontWeight: 700, color: '#0a0a0a',
+          background: '#53f293', borderRadius: 16, border: 'none',
+          fontSize: 16, fontWeight: 600, color: '#0a0a0a',
           cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
         }}>
@@ -249,14 +216,14 @@ export default function BookingConfirmationPage() {
           onClick={() => router.push('/bookings')}
           style={{
             width: '100%', padding: '15px',
-            background: '#1a1a1a', borderRadius: 9999, border: 'none',
-            fontSize: 15, fontWeight: 700, color: '#ffffff',
+            background: '#f5f5f5', borderRadius: 16, border: 'none',
+            fontSize: 16, fontWeight: 600, color: '#0a0a0a',
             cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
           }}
         >
           See my bookings
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"/>
             <polyline points="12 5 19 12 12 19"/>
           </svg>
