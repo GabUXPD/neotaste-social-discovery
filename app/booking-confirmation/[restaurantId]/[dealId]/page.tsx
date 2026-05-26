@@ -2,6 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { useState } from 'react'
 import { RESTAURANT_MAP } from '@/lib/restaurants'
 
 /* ─── Helpers ─────────────────────────────────────────────────────────── */
@@ -19,6 +20,7 @@ export default function BookingConfirmationPage() {
   const router       = useRouter()
   const restaurantId = params.restaurantId as string
   const dealId       = params.dealId as string
+  const [leavingTo, setLeavingTo] = useState<string | null>(null)
 
   const restaurant = RESTAURANT_MAP[restaurantId]
   const deal       = restaurant?.fullDeals.find((d) => d.id === dealId)
@@ -35,16 +37,20 @@ export default function BookingConfirmationPage() {
   }
 
   return (
-    <div style={{
-      background: '#0d1a12',
-      minHeight: '100dvh',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '0 20px',
-      fontFamily: 'Poppins, sans-serif',
-    }}>
+    <div
+      className={leavingTo ? 'page-leave' : 'page-enter'}
+      onAnimationEnd={() => { if (leavingTo) router.push(leavingTo) }}
+      style={{
+        background: '#0d1a12',
+        minHeight: '100dvh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '0 20px',
+        fontFamily: 'Poppins, sans-serif',
+      }}
+    >
 
       {/* ── HEADLINE ─────────────────────────────────────────────────── */}
       <div style={{ textAlign: 'center', marginBottom: 28, paddingTop: 48 }}>
@@ -213,7 +219,7 @@ export default function BookingConfirmationPage() {
 
         {/* See my bookings */}
         <button
-          onClick={() => router.push(`/bookings?restaurantId=${restaurantId}&dealId=${dealId}`)}
+          onClick={() => setLeavingTo(`/bookings?restaurantId=${restaurantId}&dealId=${dealId}`)}
           className="press-scale"
           style={{
             width: '100%', padding: '15px',
@@ -233,7 +239,7 @@ export default function BookingConfirmationPage() {
 
       {/* ── CONTINUE DISCOVERING ─────────────────────────────────────── */}
       <button
-        onClick={() => router.push('/discover')}
+        onClick={() => setLeavingTo('/discover')}
         style={{
           marginTop: 20, marginBottom: 32,
           background: 'none', border: 'none', cursor: 'pointer',

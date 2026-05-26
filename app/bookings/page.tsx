@@ -20,7 +20,7 @@ function BookingsContent() {
   const dealTitle      = deal?.title       ?? '2for1 Coffee-Dessert Bundle'
 
   return (
-    <div style={{
+    <div className="page-enter" style={{
       background: '#fefefe',
       minHeight: '100dvh',
       display: 'flex',

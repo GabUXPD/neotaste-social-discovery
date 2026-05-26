@@ -14,6 +14,7 @@ export default function RestaurantDetailPage() {
   const [activeTab,    setActiveTab]    = useState<'overview' | 'reviews' | 'about'>('overview')
   const [isBooked,     setIsBooked]     = useState(false)
   const [bookedDealId, setBookedDealId] = useState<string | null>(null)
+  const [isLeaving,    setIsLeaving]    = useState(false)
 
   useEffect(() => {
     const booked = JSON.parse(localStorage.getItem('neotaste_booked') ?? '[]') as string[]
@@ -41,13 +42,17 @@ export default function RestaurantDetailPage() {
   const showSimilar = activeTab === 'overview'
 
   return (
-    <div style={{ width: '100%', minHeight: '100dvh', background: '#ffffff', overflowY: 'auto', paddingBottom: 40, fontFamily: 'Poppins, sans-serif' }}>
+    <div
+      className={isLeaving ? 'page-leave' : 'page-enter'}
+      onAnimationEnd={() => { if (isLeaving) router.back() }}
+      style={{ width: '100%', minHeight: '100dvh', background: '#ffffff', overflowY: 'auto', paddingBottom: 40, fontFamily: 'Poppins, sans-serif' }}
+    >
 
       {/* ── HEADER ───────────────────────────────────────────────────── */}
       <div style={{ padding: '52px 16px 0' }}>
         {/* Back row */}
         <div style={{ display: 'flex', alignItems: 'center', paddingBottom: 12 }}>
-          <button onClick={() => router.back()} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0', display: 'flex', alignItems: 'center' }}>
+          <button onClick={() => setIsLeaving(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0', display: 'flex', alignItems: 'center' }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111827" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M19 12H5M12 5l-7 7 7 7"/>
             </svg>
