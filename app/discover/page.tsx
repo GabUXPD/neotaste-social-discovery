@@ -482,7 +482,7 @@ function BottomSheet({
         borderRadius: '20px 20px 0 0',
         boxShadow: '0 -4px 24px rgba(0,0,0,0.12)',
         zIndex: 30,
-        height: expanded ? 'calc(100dvh - 250px)' : 120,
+        height: expanded ? 'calc(100dvh - 65px)' : 120,
         transition: 'height 0.4s cubic-bezier(0.16,1,0.3,1)',
         overflowY: expanded ? 'scroll' : 'hidden',
         WebkitOverflowScrolling: 'touch',
@@ -505,7 +505,7 @@ function BottomSheet({
       </div>
 
       {/* List */}
-      <div style={{ padding: '0 16px 80px', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ padding: `${expanded ? 185 : 0}px 16px 80px`, display: 'flex', flexDirection: 'column' }}>
         {RESTAURANTS.map((r, i) => (
           <div key={r.id}>
             <div onClick={() => onRestaurantTap(r.id)} className="press-scale" style={{ cursor: 'pointer', paddingTop: 8, paddingBottom: 8 }}>
