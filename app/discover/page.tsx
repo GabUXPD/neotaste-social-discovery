@@ -242,7 +242,7 @@ function RestaurantPin({
           {/* Body */}
           <path
             d="M12 0C5.37 0 0 5.37 0 12C0 20.5 12 32 12 32C12 32 24 20.5 24 12C24 5.37 18.63 0 12 0Z"
-            fill={isSelected ? '#2d9e58' : '#53f293'}
+            fill={isBooked ? '#145b32' : isSelected ? '#2d9e58' : '#53f293'}
           />
           {isBooked ? (
             /* Checkmark — booked state */
@@ -318,7 +318,7 @@ function MapPin({ top, left, fires, isSelected, isBooked, onTap }: {
         style={{ display: 'block', filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.30))' }}>
         <path
           d="M12 0C5.37 0 0 5.37 0 12C0 20.5 12 32 12 32C12 32 24 20.5 24 12C24 5.37 18.63 0 12 0Z"
-          fill={isSelected ? '#2d9e58' : '#53f293'}
+          fill={isBooked ? '#145b32' : isSelected ? '#2d9e58' : '#53f293'}
         />
         {isBooked ? (
           <>
