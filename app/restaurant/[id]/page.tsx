@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { RESTAURANT_MAP, type FullDeal, type Review, type SimilarRestaurant } from '@/lib/restaurants'
 
 /* ─── Page ───────────────────────────────────────────────────────────── */
@@ -11,7 +11,18 @@ export default function RestaurantDetailPage() {
   const router  = useRouter()
   const id      = params.id as string
   const detail  = RESTAURANT_MAP[id]
-  const [activeTab, setActiveTab] = useState<'overview' | 'reviews' | 'about'>('overview')
+  const [activeTab,    setActiveTab]    = useState<'overview' | 'reviews' | 'about'>('overview')
+  const [isBooked,     setIsBooked]     = useState(false)
+  const [bookedDealId, setBookedDealId] = useState<string | null>(null)
+
+  useEffect(() => {
+    const booked = JSON.parse(localStorage.getItem('neotaste_booked') ?? '[]') as string[]
+    if (booked.includes(id)) {
+      setIsBooked(true)
+      const bookedDeals = JSON.parse(localStorage.getItem('neotaste_booked_deal') ?? '{}') as Record<string, string>
+      setBookedDealId(bookedDeals[id] ?? null)
+    }
+  }, [id])
 
   if (!detail) {
     return (
@@ -43,9 +54,26 @@ export default function RestaurantDetailPage() {
           </button>
         </div>
 
-        {/* Name */}
-        <div style={{ fontSize: 32, fontWeight: 700, color: '#111827', lineHeight: '38px', marginBottom: 6 }}>
-          {detail.name}
+        {/* Name + Booked badge */}
+        <div style={{ position: 'relative', marginBottom: 6 }}>
+          <div style={{ fontSize: 32, fontWeight: 700, color: '#111827', lineHeight: '38px', paddingRight: isBooked ? 48 : 0 }}>
+            {detail.name}
+          </div>
+          {isBooked && (
+            <div style={{
+              position: 'absolute', top: 0, right: 0,
+              display: 'flex', flexDirection: 'column', alignItems: 'center',
+              gap: 1, padding: 4,
+            }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <rect x="2" y="2" width="20" height="20" rx="5" fill="#53f293"/>
+                <polyline points="6 12 10 16 18 8" stroke="#145b32" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span style={{ fontSize: 10, fontWeight: 500, color: '#145b32', lineHeight: '12px', whiteSpace: 'nowrap' }}>
+                Booked
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Rating · categories · price */}
@@ -124,7 +152,7 @@ export default function RestaurantDetailPage() {
         {showDeals && (
           <>
             <SectionHeader title="Deals" showInfo />
-            {detail.fullDeals.map((deal) => <DealCard key={deal.id} deal={deal} hasSocial={detail.friends.length > 0} />)}
+            {detail.fullDeals.map((deal) => <DealCard key={deal.id} deal={deal} hasSocial={detail.friends.length > 0} bookedDealId={bookedDealId} />)}
           </>
         )}
 
@@ -237,9 +265,10 @@ function SectionHeader({ title, showInfo }: { title: string; showInfo?: boolean 
 }
 
 /* ─── Deal Card ──────────────────────────────────────────────────────── */
-function DealCard({ deal, hasSocial }: { deal: FullDeal; hasSocial: boolean }) {
-  const router  = useRouter()
-  const isLight = deal.bgColor === '#53f293'
+function DealCard({ deal, hasSocial, bookedDealId }: { deal: FullDeal; hasSocial: boolean; bookedDealId: string | null }) {
+  const router       = useRouter()
+  const isLight      = deal.bgColor === '#53f293'
+  const isDealBooked = bookedDealId === deal.id
   const txtSub  = isLight ? '#1a5c35' : '#d1fae5'
   const chipBdr = isLight ? 'rgba(0,0,0,0.1)' : 'rgba(83,242,147,0.2)'
   const chipClr = isLight ? '#374151' : '#86efb2'
@@ -332,23 +361,33 @@ function DealCard({ deal, hasSocial }: { deal: FullDeal; hasSocial: boolean }) {
       </div>
 
       {/* CTA */}
-      {deal.booked ? (
+      {isDealBooked ? (
         <button
-          onClick={() => router.push('/bookings')}
-          style={{ width: '100%', padding: '13px', background: 'transparent', borderRadius: 10, border: `1.5px solid ${isLight ? '#11301d' : '#53f293'}`, fontSize: 14, fontWeight: 700, color: isLight ? '#11301d' : '#53f293', cursor: 'pointer' }}
+          onClick={() => router.push(`/bookings?restaurantId=${deal.restaurantId}&dealId=${deal.id}`)}
+          style={{
+            width: '100%', padding: '13px',
+            background: isLight ? '#11301d' : '#53f293',
+            borderRadius: 16, border: 'none',
+            fontSize: 14, fontWeight: 600,
+            color: isLight ? '#fefefe' : '#0a0a0a',
+            cursor: 'pointer',
+          }}
         >
           View booking
         </button>
       ) : (
         <button
           onClick={() => {
-              const stored = JSON.parse(localStorage.getItem('neotaste_booked') ?? '[]') as string[]
-              if (!stored.includes(deal.restaurantId)) {
-                localStorage.setItem('neotaste_booked', JSON.stringify([...stored, deal.restaurantId]))
-              }
-              router.push(`/booking-confirmation/${deal.restaurantId}/${deal.id}`)
-            }}
-          style={{ width: '100%', padding: '13px', background: isLight ? '#11301d' : '#53f293', borderRadius: 10, border: 'none', fontSize: 14, fontWeight: 700, color: isLight ? '#53f293' : '#0a0a0a', cursor: 'pointer' }}
+            const stored = JSON.parse(localStorage.getItem('neotaste_booked') ?? '[]') as string[]
+            if (!stored.includes(deal.restaurantId)) {
+              localStorage.setItem('neotaste_booked', JSON.stringify([...stored, deal.restaurantId]))
+            }
+            const bookedDeals = JSON.parse(localStorage.getItem('neotaste_booked_deal') ?? '{}') as Record<string, string>
+            bookedDeals[deal.restaurantId] = deal.id
+            localStorage.setItem('neotaste_booked_deal', JSON.stringify(bookedDeals))
+            router.push(`/booking-confirmation/${deal.restaurantId}/${deal.id}`)
+          }}
+          style={{ width: '100%', padding: '13px', background: isLight ? '#11301d' : '#53f293', borderRadius: 16, border: 'none', fontSize: 14, fontWeight: 700, color: isLight ? '#53f293' : '#0a0a0a', cursor: 'pointer' }}
         >
           Book deal
         </button>
