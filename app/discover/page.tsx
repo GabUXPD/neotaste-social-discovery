@@ -414,7 +414,7 @@ export default function DiscoverPage() {
           onClick={() => setSheetExpanded(false)}
           style={{
             position: 'absolute',
-            bottom: 81,
+            bottom: 101,
             left: '50%',
             transform: 'translateX(-50%)',
             display: 'inline-flex',
@@ -614,7 +614,7 @@ function TopSection({
   return (
     <div style={{
       position: 'absolute', top: 0, left: 0, right: 0,
-      padding: '48px 16px 0', zIndex: 20,
+      padding: '48px 16px 0', zIndex: 35,
       display: 'flex', flexDirection: 'column', gap: 16,
     }}>
       {/* Search pill */}
@@ -718,14 +718,16 @@ function BottomSheet({
   return (
     <div
       style={{
-        position: 'absolute', bottom: 65, left: 0, right: 0,
+        position: 'absolute', bottom: 85, left: 0, right: 0,
         background: '#ffffff',
         borderRadius: '20px 20px 0 0',
         boxShadow: '0 -4px 24px rgba(0,0,0,0.12)',
         zIndex: 30,
-        height: expanded ? 'calc(100dvh - 110px)' : 120,
+        height: expanded ? 'calc(100dvh - 250px)' : 120,
         transition: 'height 0.4s cubic-bezier(0.16,1,0.3,1)',
-        overflowY: expanded ? 'auto' : 'hidden',
+        overflowY: expanded ? 'scroll' : 'hidden',
+        WebkitOverflowScrolling: 'touch',
+        overscrollBehavior: 'contain',
       }}
       className="scrollbar-hide"
     >
