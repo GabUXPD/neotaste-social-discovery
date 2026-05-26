@@ -98,7 +98,7 @@ export default function DiscoverPage() {
       ))}
 
       {/* TOP SECTION: search + filter chips */}
-      <TopSection activeFilter={activeFilter} onFilterChange={setActiveFilter} />
+      <TopSection activeFilter={activeFilter} onFilterChange={setActiveFilter} sheetExpanded={sheetExpanded} />
 
       {/* LOCATION FAB */}
       <button style={{
@@ -361,9 +361,11 @@ function MapPin({ top, left, fires, isSelected, isBooked, onTap }: {
 function TopSection({
   activeFilter,
   onFilterChange,
+  sheetExpanded,
 }: {
   activeFilter: number
   onFilterChange: (i: number) => void
+  sheetExpanded: boolean
 }) {
   const chipShadow = '0 2px 7px rgba(67,67,67,0.25)'
 
@@ -372,7 +374,7 @@ function TopSection({
       position: 'absolute', top: 0, left: 0, right: 0,
       padding: '48px 16px 0', zIndex: 35,
       display: 'flex', flexDirection: 'column', gap: 16,
-      background: '#ffffff',
+      background: sheetExpanded ? '#ffffff' : 'transparent',
     }}>
       {/* Search pill */}
       <div style={{
