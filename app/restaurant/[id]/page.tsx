@@ -333,7 +333,7 @@ function DealCard({ deal }: { deal: FullDeal }) {
       ) : (
         <button
           onClick={() => router.push(`/booking-confirmation/${deal.restaurantId}/${deal.id}`)}
-          style={{ width: '100%', padding: '13px', background: isLight ? '#11301d' : 'rgba(83,242,147,0.2)', borderRadius: 10, border: 'none', fontSize: 14, fontWeight: 700, color: '#53f293', cursor: 'pointer' }}
+          style={{ width: '100%', padding: '13px', background: isLight ? '#11301d' : '#53f293', borderRadius: 10, border: 'none', fontSize: 14, fontWeight: 700, color: isLight ? '#53f293' : '#0a0a0a', cursor: 'pointer' }}
         >
           Book deal
         </button>
