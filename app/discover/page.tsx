@@ -532,14 +532,15 @@ function ListItem({ r, isBooked = false }: { r: Restaurant; isBooked?: boolean }
     <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
 
       {/* Image + heart */}
-      <div style={{
-        position: 'relative', flexShrink: 0,
-        width: 108, height: 108, borderRadius: 16, overflow: 'hidden',
-      }}>
-        <Image
-          src={r.listImage} alt={r.name}
-          fill priority={r.priority} style={{ objectFit: 'cover' }}
-        />
+      <div style={{ position: 'relative', flexShrink: 0, width: 108, height: 108 }}>
+        {/* Image — overflow:hidden sólo aquí para no clipar el botón */}
+        <div style={{ position: 'absolute', inset: 0, borderRadius: 16, overflow: 'hidden' }}>
+          <Image
+            src={r.listImage} alt={r.name}
+            fill priority={r.priority} style={{ objectFit: 'cover' }}
+          />
+        </div>
+        {/* Corazón — fuera del overflow:hidden para que la animación no se corte */}
         <button
           onClick={(e) => { e.stopPropagation(); setIsLiked(!isLiked); setHeartAnim(true) }}
           onAnimationEnd={() => setHeartAnim(false)}
@@ -549,7 +550,7 @@ function ListItem({ r, isBooked = false }: { r: Restaurant; isBooked?: boolean }
             width: 24, height: 24, borderRadius: 9999,
             background: 'none', border: 'none',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            cursor: 'pointer', padding: 0,
+            cursor: 'pointer', padding: 0, zIndex: 1,
           }}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill={isLiked ? '#f43f5e' : 'none'} stroke={isLiked ? '#f43f5e' : 'rgba(255,255,255,0.9)'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
