@@ -124,7 +124,7 @@ export default function RestaurantDetailPage() {
         {showDeals && (
           <>
             <SectionHeader title="Deals" showInfo />
-            {detail.fullDeals.map((deal) => <DealCard key={deal.id} deal={deal} />)}
+            {detail.fullDeals.map((deal) => <DealCard key={deal.id} deal={deal} hasSocial={detail.friends.length > 0} />)}
           </>
         )}
 
@@ -237,7 +237,7 @@ function SectionHeader({ title, showInfo }: { title: string; showInfo?: boolean 
 }
 
 /* ─── Deal Card ──────────────────────────────────────────────────────── */
-function DealCard({ deal }: { deal: FullDeal }) {
+function DealCard({ deal, hasSocial }: { deal: FullDeal; hasSocial: boolean }) {
   const router  = useRouter()
   const isLight = deal.bgColor === '#53f293'
   const txtSub  = isLight ? '#1a5c35' : '#d1fae5'
@@ -298,19 +298,21 @@ function DealCard({ deal }: { deal: FullDeal }) {
           </span>
         </div>
 
-        {/* Avatars + names */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-          <div style={{ display: 'flex' }}>
-            {deal.users.map((u, i) => (
-              <div key={i} style={{ width: 26, height: 26, borderRadius: 9999, border: `2px solid ${isLight ? 'rgba(33,151,80,0.79)' : '#145b32'}`, marginLeft: i > 0 ? -8 : 0, overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
-                <Image src={u.src} alt={u.alt} width={26} height={26} style={{ objectFit: 'cover', width: 26, height: 26, borderRadius: 9999 }} />
-              </div>
-            ))}
+        {/* Avatars + names — solo si el restaurante tiene social pill */}
+        {hasSocial && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+            <div style={{ display: 'flex' }}>
+              {deal.users.map((u, i) => (
+                <div key={i} style={{ width: 26, height: 26, borderRadius: 9999, border: `2px solid ${isLight ? 'rgba(33,151,80,0.79)' : '#145b32'}`, marginLeft: i > 0 ? -8 : 0, overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
+                  <Image src={u.src} alt={u.alt} width={26} height={26} style={{ objectFit: 'cover', width: 26, height: 26, borderRadius: 9999 }} />
+                </div>
+              ))}
+            </div>
+            <span style={{ fontSize: 12, fontWeight: 600, color: '#ffffff' }}>
+              {deal.userNames} <span style={{ fontSize: 12, fontWeight: 400 }}>recommend it</span>
+            </span>
           </div>
-          <span style={{ fontSize: 12, fontWeight: 600, color: '#ffffff' }}>
-            {deal.userNames} <span style={{ fontSize: 12, fontWeight: 400 }}>recommend it</span>
-          </span>
-        </div>
+        )}
 
         {/* Tag chips */}
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -320,6 +322,13 @@ function DealCard({ deal }: { deal: FullDeal }) {
             </span>
           ))}
         </div>
+
+        {/* Based on X reviews — solo si no hay social */}
+        {!hasSocial && (
+          <div style={{ marginTop: 4, fontSize: 10, fontWeight: 500, color: isLight ? '#bafad4' : '#53f293' }}>
+            Based on {deal.reviewCount} reviews
+          </div>
+        )}
       </div>
 
       {/* CTA */}
