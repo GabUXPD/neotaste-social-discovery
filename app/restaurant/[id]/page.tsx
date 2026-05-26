@@ -95,7 +95,7 @@ export default function RestaurantDetailPage() {
             { label: 'Save', svg: <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/> },
             { label: 'Share', svg: <><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></> },
           ].map((btn) => (
-            <button key={btn.label} style={{
+            <button key={btn.label} className="press-scale" style={{
               flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 5,
               padding: '12px 16px', borderRadius: 16,
               border: 'none', background: '#f5f5f5',
@@ -364,6 +364,7 @@ function DealCard({ deal, hasSocial, bookedDealId }: { deal: FullDeal; hasSocial
       {isDealBooked ? (
         <button
           onClick={() => router.push(`/bookings?restaurantId=${deal.restaurantId}&dealId=${deal.id}`)}
+          className="press-scale"
           style={{
             width: '100%', padding: '13px',
             background: isLight ? '#11301d' : '#53f293',
@@ -387,6 +388,7 @@ function DealCard({ deal, hasSocial, bookedDealId }: { deal: FullDeal; hasSocial
             localStorage.setItem('neotaste_booked_deal', JSON.stringify(bookedDeals))
             router.push(`/booking-confirmation/${deal.restaurantId}/${deal.id}`)
           }}
+          className="press-scale"
           style={{ width: '100%', padding: '13px', background: isLight ? '#11301d' : '#53f293', borderRadius: 16, border: 'none', fontSize: 14, fontWeight: 700, color: isLight ? '#53f293' : '#0a0a0a', cursor: 'pointer' }}
         >
           Book deal
@@ -483,6 +485,7 @@ function SimilarCard({ r }: { r: SimilarRestaurant }) {
   return (
     <div
       onClick={() => router.push(`/restaurant/${r.id}`)}
+      className="press-scale"
       style={{ flexShrink: 0, width: 170, borderRadius: 14, overflow: 'hidden', background: '#ffffff', boxShadow: '0 1px 8px rgba(0,0,0,0.1)', cursor: 'pointer' }}
     >
       {/* Photo + badge */}

@@ -50,7 +50,7 @@ export default function PeekCard({ restaurant, onClose, onViewDetail, isBooked =
   return (
     /* Compact horizontal card — no backdrop, map stays visible */
     <div
-      className="animate-slide-up"
+      className="animate-slide-up press-scale"
       style={{
         position: 'absolute',
         bottom: 77,
@@ -82,6 +82,7 @@ export default function PeekCard({ restaurant, onClose, onViewDetail, isBooked =
         {/* Corazón — esquina superior derecha de la foto */}
         <button
           onClick={(e) => e.stopPropagation()}
+          className="press-scale"
           style={{
             position: 'absolute', top: 6, right: 6,
             width: 24, height: 24, borderRadius: 9999,
@@ -240,6 +241,7 @@ export default function PeekCard({ restaurant, onClose, onViewDetail, isBooked =
               <div
                 key={i}
                 onClick={(e) => e.stopPropagation()}
+                className="press-scale"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 3,
                   background: '#53f293',

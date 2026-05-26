@@ -196,7 +196,7 @@ export default function BookingConfirmationPage() {
       {/* ── ACTION BUTTONS ────────────────────────────────────────────── */}
       <div style={{ width: '100%', maxWidth: 390, display: 'flex', flexDirection: 'column', gap: 10 }}>
         {/* Share with friends */}
-        <button style={{
+        <button className="press-scale" style={{
           width: '100%', padding: '15px',
           background: '#53f293', borderRadius: 16, border: 'none',
           fontSize: 16, fontWeight: 600, color: '#0a0a0a',
@@ -214,6 +214,7 @@ export default function BookingConfirmationPage() {
         {/* See my bookings */}
         <button
           onClick={() => router.push(`/bookings?restaurantId=${restaurantId}&dealId=${dealId}`)}
+          className="press-scale"
           style={{
             width: '100%', padding: '15px',
             background: '#f5f5f5', borderRadius: 16, border: 'none',

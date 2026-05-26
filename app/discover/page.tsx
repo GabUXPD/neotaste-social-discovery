@@ -399,6 +399,7 @@ function TopSection({
             <button
               key={i}
               onClick={() => onFilterChange(activeFilter === i ? -1 : i)}
+              className="press-scale"
               style={{
                 flexShrink: 0,
                 display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -507,7 +508,7 @@ function BottomSheet({
       <div style={{ padding: '0 16px 80px', display: 'flex', flexDirection: 'column' }}>
         {RESTAURANTS.map((r, i) => (
           <div key={r.id}>
-            <div onClick={() => onRestaurantTap(r.id)} style={{ cursor: 'pointer', paddingTop: 8, paddingBottom: 8 }}>
+            <div onClick={() => onRestaurantTap(r.id)} className="press-scale" style={{ cursor: 'pointer', paddingTop: 8, paddingBottom: 8 }}>
               <ListItem r={r} isBooked={bookedIds.has(r.id)} />
             </div>
             {i < RESTAURANTS.length - 1 && (
@@ -539,6 +540,7 @@ function ListItem({ r, isBooked = false }: { r: Restaurant; isBooked?: boolean }
         />
         <button
           onClick={(e) => e.stopPropagation()}
+          className="press-scale"
           style={{
             position: 'absolute', top: 8, right: 8,
             width: 24, height: 24, borderRadius: 9999,
@@ -624,6 +626,7 @@ function ListItem({ r, isBooked = false }: { r: Restaurant; isBooked?: boolean }
             {r.deals.map((deal, i) => (
               <div
                 key={i}
+                className="press-scale"
                 style={{
                   flexShrink: 0,
                   background: '#53f293', borderRadius: 24,

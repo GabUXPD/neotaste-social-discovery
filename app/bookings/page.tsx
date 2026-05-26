@@ -128,7 +128,7 @@ function BookingsContent() {
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 4px' }}>
 
             {/* Location */}
-            <button style={{
+            <button className="press-scale" style={{
               flex: '1 0 0', minWidth: 0,
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               gap: 4,
@@ -145,7 +145,7 @@ function BookingsContent() {
             </button>
 
             {/* Share */}
-            <button style={{
+            <button className="press-scale" style={{
               flex: '1 0 0', minWidth: 0,
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               gap: 4,
@@ -161,7 +161,7 @@ function BookingsContent() {
             </button>
 
             {/* Cancel */}
-            <button style={{
+            <button className="press-scale" style={{
               flex: '1 0 0', minWidth: 0,
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               gap: 4,
@@ -177,7 +177,7 @@ function BookingsContent() {
             </button>
 
             {/* Support — service bell */}
-            <button style={{
+            <button className="press-scale" style={{
               flex: '1 0 0', minWidth: 0,
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               gap: 4,
@@ -195,7 +195,7 @@ function BookingsContent() {
           </div>
 
           {/* ── Redeem deal ────────────────────────────────────────────── */}
-          <button style={{
+          <button className="press-scale" style={{
             width: '100%', padding: 16,
             background: '#53f293', borderRadius: 16, border: 'none',
             fontSize: 16, fontWeight: 600, color: '#0a0a0a',
@@ -206,7 +206,7 @@ function BookingsContent() {
         </div>
 
         {/* ── Share with friends ──────────────────────────────────────── */}
-        <button style={{
+        <button className="press-scale" style={{
           width: '100%', padding: 16,
           background: '#f5f5f5', borderRadius: 16, border: 'none',
           fontSize: 16, fontWeight: 600, color: '#0a0a0a',
