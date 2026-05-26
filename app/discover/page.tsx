@@ -258,7 +258,7 @@ function RestaurantPin({
               x="12" y="13"
               textAnchor="middle"
               dominantBaseline="middle"
-              fill="#1c1d28"
+              fill={isSelected ? '#ffffff' : '#1c1d28'}
               fontSize={isSelected ? '11' : '9'}
               fontWeight="800"
               fontFamily="'Poppins', sans-serif"
@@ -331,7 +331,7 @@ function MapPin({ top, left, fires, isSelected, isBooked, onTap }: {
           </>
         ) : fires === 0 ? (
           <text x="12" y="13" textAnchor="middle" dominantBaseline="middle"
-            fill="#1c1d28" fontSize={isSelected ? '11' : '9'} fontWeight="800" fontFamily="'Poppins', sans-serif">N</text>
+            fill={isSelected ? '#ffffff' : '#1c1d28'} fontSize={isSelected ? '11' : '9'} fontWeight="800" fontFamily="'Poppins', sans-serif">N</text>
         ) : (
           <>
             <circle cx="12" cy="12" r="9" fill="#fefde8" />
