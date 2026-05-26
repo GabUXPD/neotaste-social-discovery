@@ -539,10 +539,16 @@ function DealCard({ deal }: { deal: Deal }) {
         </div>
         <div style={{ display: 'flex', gap: 4, flexShrink: 0, marginTop: 2 }}>
           <span style={{ fontSize: 11, fontWeight: 600, color: chipClr, borderRadius: 9999, padding: '3px 8px', border: `1px solid ${chipBdr}`, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
-            🎁 Avg. {deal.avgPrice}
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><path d="M12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+            </svg>
+            Avg. {deal.avgPrice}
           </span>
           <span style={{ fontSize: 11, fontWeight: 600, color: chipClr, borderRadius: 9999, padding: '3px 8px', border: `1px solid ${chipBdr}`, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
-            🔄 {deal.duration}
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+            </svg>
+            {deal.duration}
           </span>
         </div>
       </div>
@@ -553,7 +559,7 @@ function DealCard({ deal }: { deal: Deal }) {
       </div>
 
       {/* ── Recency block ─────────────────────────────────────────── */}
-      <div style={{ background: '#145b32', borderRadius: 8, padding: '16px 8px', marginBottom: 12 }}>
+      <div style={{ background: isLight ? 'rgba(33,151,80,0.79)' : '#145b32', borderRadius: 8, padding: '16px 8px', marginBottom: 12 }}>
 
         {/* Fires + popular count */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
@@ -567,21 +573,18 @@ function DealCard({ deal }: { deal: Deal }) {
           </span>
         </div>
 
-        {/* Avatars + names + See review */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div style={{ display: 'flex' }}>
-              {deal.users.map((u, i) => (
-                <div key={i} style={{ width: 26, height: 26, borderRadius: 9999, border: '2px solid #145b32', marginLeft: i > 0 ? -8 : 0, overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
-                  <Image src={u.src} alt={u.alt} width={26} height={26} style={{ objectFit: 'cover', width: 26, height: 26, borderRadius: 9999 }} />
-                </div>
-              ))}
-            </div>
-            <span style={{ fontSize: 12, fontWeight: 600, color: '#ffffff' }}>{deal.userNames} recommend it</span>
+        {/* Avatars + names */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+          <div style={{ display: 'flex' }}>
+            {deal.users.map((u, i) => (
+              <div key={i} style={{ width: 26, height: 26, borderRadius: 9999, border: `2px solid ${isLight ? 'rgba(33,151,80,0.79)' : '#145b32'}`, marginLeft: i > 0 ? -8 : 0, overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
+                <Image src={u.src} alt={u.alt} width={26} height={26} style={{ objectFit: 'cover', width: 26, height: 26, borderRadius: 9999 }} />
+              </div>
+            ))}
           </div>
-          <button style={{ background: 'rgba(254,254,254,0.05)', border: 'none', borderRadius: 9999, padding: '5px 10px', fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,0.6)', cursor: 'pointer', flexShrink: 0 }}>
-            See review
-          </button>
+          <span style={{ fontSize: 12, fontWeight: 600, color: '#ffffff' }}>
+            {deal.userNames} <span style={{ fontSize: 12, fontWeight: 400 }}>recommend it</span>
+          </span>
         </div>
 
         {/* Tag chips */}
