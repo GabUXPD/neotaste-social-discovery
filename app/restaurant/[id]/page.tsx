@@ -12,6 +12,7 @@ interface Deal {
   description: string; popularCount: number; bgColor: string
   users: DealUser[]; userNames: string; tags: DealTag[]; reviewCount: number
   restaurantId?: string; booked?: boolean
+  avgRating: number; trustedPartner: boolean; fires: number
 }
 interface Review {
   name: string; avatar: string; isInitial: boolean; initial: string
@@ -48,6 +49,7 @@ const DETAILS: Record<string, Detail> = {
         userNames: 'Sofia & Mateo',
         tags: [{ icon: '✓', label: 'great taste' }, { icon: '✓', label: 'value/quality' }],
         reviewCount: 24, booked: true,
+        avgRating: 4.9, trustedPartner: true, fires: 2,
       },
       {
         id: 'd2', title: '20% OFF Beer', avgPrice: '€6', duration: '30 days',
@@ -57,6 +59,7 @@ const DETAILS: Record<string, Detail> = {
         userNames: 'Ana & Raul +1',
         tags: [{ icon: '✓', label: 'great taste' }, { icon: '✓', label: 'value/quality' }],
         reviewCount: 18,
+        avgRating: 4.7, trustedPartner: true, fires: 3,
       },
     ],
     reviews: [
@@ -94,6 +97,7 @@ const DETAILS: Record<string, Detail> = {
         userNames: 'Luna & Tobias',
         tags: [{ icon: '✓', label: 'great taste' }, { icon: '✓', label: 'value/quality' }],
         reviewCount: 21,
+        avgRating: 4.8, trustedPartner: true, fires: 2,
       },
     ],
     reviews: [
@@ -130,6 +134,7 @@ const DETAILS: Record<string, Detail> = {
         userNames: 'Ana & Carla',
         tags: [{ icon: '✓', label: 'great taste' }, { icon: '✓', label: 'value/quality' }],
         reviewCount: 19,
+        avgRating: 4.7, trustedPartner: true, fires: 2,
       },
       {
         id: 'd2', title: '25% OFF Wine', avgPrice: '€28', duration: '90 days',
@@ -139,6 +144,7 @@ const DETAILS: Record<string, Detail> = {
         userNames: 'Pablo & Nina',
         tags: [{ icon: '✓', label: 'great taste' }],
         reviewCount: 14,
+        avgRating: 4.6, trustedPartner: false, fires: 1,
       },
     ],
     reviews: [
@@ -175,6 +181,7 @@ const DETAILS: Record<string, Detail> = {
         userNames: 'Emma & Klaus',
         tags: [{ icon: '✓', label: 'great taste' }, { icon: '✓', label: 'value/quality' }],
         reviewCount: 15,
+        avgRating: 4.5, trustedPartner: true, fires: 1,
       },
     ],
     reviews: [
@@ -211,6 +218,7 @@ const DETAILS: Record<string, Detail> = {
         userNames: 'María & Jorge',
         tags: [{ icon: '✓', label: 'great taste' }, { icon: '✓', label: 'value/quality' }],
         reviewCount: 31,
+        avgRating: 4.9, trustedPartner: true, fires: 3,
       },
     ],
     reviews: [
@@ -247,6 +255,7 @@ const DETAILS: Record<string, Detail> = {
         userNames: 'Jana & Frieda',
         tags: [{ icon: '✓', label: 'great taste' }],
         reviewCount: 12,
+        avgRating: 4.8, trustedPartner: true, fires: 2,
       },
     ],
     reviews: [
@@ -539,12 +548,14 @@ function DealCard({ deal }: { deal: Deal }) {
           ⚡ {deal.title}
         </div>
         <div style={{ display: 'flex', gap: 4, flexShrink: 0, marginTop: 2 }}>
-          <span style={{ fontSize: 11, fontWeight: 600, color: chipClr, borderRadius: 9999, padding: '3px 8px', border: `1px solid ${chipBdr}`, display: 'inline-flex', alignItems: 'center' }}>
-            Avg. {deal.avgPrice}
+          <span style={{ fontSize: 11, fontWeight: 600, color: chipClr, borderRadius: 9999, padding: '3px 8px', border: `1px solid ${chipBdr}`, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+            🔥 Avg. {deal.avgRating}
           </span>
-          <span style={{ fontSize: 11, fontWeight: 600, color: chipClr, borderRadius: 9999, padding: '3px 8px', border: `1px solid ${chipBdr}`, display: 'inline-flex', alignItems: 'center' }}>
-            {deal.duration}
-          </span>
+          {deal.trustedPartner && (
+            <span style={{ fontSize: 11, fontWeight: 600, color: chipClr, borderRadius: 9999, padding: '3px 8px', border: `1px solid ${chipBdr}`, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+              💬 Trusted partner
+            </span>
+          )}
         </div>
       </div>
 
@@ -558,9 +569,13 @@ function DealCard({ deal }: { deal: Deal }) {
 
         {/* Fires + popular count */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
-          <span style={{ fontSize: 14 }}>🔥🔥🔥</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+            {Array.from({ length: Math.max(1, deal.fires) }).map((_, i, arr) => (
+              <span key={i} style={{ fontSize: 14, lineHeight: 1, marginRight: i < arr.length - 1 ? -5 : 0 }}>🔥</span>
+            ))}
+          </span>
           <span style={{ fontSize: 13, fontWeight: 700, color: '#ffffff' }}>
-            Popular this week
+            {deal.popularCount} Popular this week
           </span>
         </div>
 
