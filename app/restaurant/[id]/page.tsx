@@ -3,289 +3,14 @@
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { useState } from 'react'
-
-/* ─── Types ──────────────────────────────────────────────────────────── */
-interface DealUser { src: string; alt: string }
-interface DealTag  { icon: string; label: string }
-interface Deal {
-  id: string; title: string; avgPrice: string; duration: string
-  description: string; popularCount: number; bgColor: string
-  users: DealUser[]; userNames: string; tags: DealTag[]; reviewCount: number
-  restaurantId?: string; booked?: boolean
-  avgRating: number; trustedPartner: boolean; fires: number
-}
-interface Review {
-  name: string; avatar: string; isInitial: boolean; initial: string
-  bgColor: string; rating: number; date: string; text: string
-  photos: string[]; likes: number
-}
-interface SimilarRestaurant {
-  id: string; name: string; photo: string; redemptions: string
-  rating: number; reviewCount: number; distance: string
-  categories: string; deals: { discount: string; label: string }[]
-}
-interface Detail {
-  name: string; rating: number; reviewCount: number; categories: string
-  priceLevel: string; isOpen: boolean; closeTime: string; district: string
-  heroImages: [string, string, string]
-  deals: Deal[]; reviews: Review[]
-  address: string; hours: string; mapBbox: string
-  similar: SimilarRestaurant[]
-}
-
-/* ─── Data ───────────────────────────────────────────────────────────── */
-const DETAILS: Record<string, Detail> = {
-  r1: {
-    name: 'Brava Burger Co.', rating: 4.8, reviewCount: 312,
-    categories: 'American · Burgers', priceLevel: '€€',
-    isOpen: true, closeTime: '22:00', district: 'Schanzenviertel (0.3 km)',
-    heroImages: ['/images/burger.jpg', '/images/buerger2.jpg', '/images/burger3.jpg'],
-    deals: [
-      {
-        id: 'd1', title: '2for1 Burger', avgPrice: '€14', duration: 'Limited',
-        description: 'Order any two smash burgers and pay only for one. Valid Monday to Thursday at our Schanzenviertel location.',
-        popularCount: 31, bgColor: '#11301d',
-        users: [{ src: '/images/avatarWoman.jpg', alt: 'S' }, { src: '/images/avatarManColor.jpg', alt: 'M' }],
-        userNames: 'Sofia & Mateo',
-        tags: [{ icon: '✓', label: 'great taste' }, { icon: '✓', label: 'value/quality' }],
-        reviewCount: 24, booked: true,
-        avgRating: 4.9, trustedPartner: true, fires: 2,
-      },
-      {
-        id: 'd2', title: '20% OFF Beer', avgPrice: '€6', duration: '30 days',
-        description: 'Get 20% off any craft beer with your meal. Choose from our rotating selection of local Hamburg drafts.',
-        popularCount: 19, bgColor: '#53f293',
-        users: [{ src: '/images/avatarWoman4.jpg', alt: 'A' }, { src: '/images/avatarManBw.jpg', alt: 'R' }],
-        userNames: 'Ana & Raul +1',
-        tags: [{ icon: '✓', label: 'great taste' }, { icon: '✓', label: 'value/quality' }],
-        reviewCount: 18,
-        avgRating: 4.7, trustedPartner: true, fires: 3,
-      },
-    ],
-    reviews: [
-      {
-        name: 'Johanna', avatar: '/images/avatarWoman.jpg', isInitial: false, initial: 'J', bgColor: '',
-        rating: 5, date: '3 weeks ago',
-        text: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit.',
-        photos: ['/images/burger3.jpg', '/images/burgercoke.jpg'], likes: 16,
-      },
-      {
-        name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
-        rating: 2, date: '1 week ago',
-        text: 'War super lecker', photos: [], likes: 4,
-      },
-    ],
-    address: 'Schulterblatt 58, 20357 Hamburg\nSchanzenviertel (0.3 km away)',
-    hours: 'Open · Closes at 22:00',
-    mapBbox: '9.955,53.558,9.975,53.573',
-    similar: [
-      { id: 'r5', name: 'La Brasa', photo: '/images/platoCarne.jpg', redemptions: '700+', rating: 4.9, reviewCount: 421, distance: '25 m', categories: 'Burgers, Asian', deals: [{ discount: '20% OFF', label: 'Asado' }, { discount: '1 FREE', label: 'Fries' }] },
-      { id: 'r3', name: 'Pasta & Alma', photo: '/images/pastasPlato.jpg', redemptions: '200+', rating: 4.7, reviewCount: 254, distance: '80 m', categories: 'Italian, Pasta', deals: [{ discount: '2for1', label: 'Burger' }, { discount: '1 FREE', label: 'FR...' }] },
-    ],
-  },
-  r2: {
-    name: 'Café Moderno', rating: 4.6, reviewCount: 198,
-    categories: 'Café · Brunch', priceLevel: '€€',
-    isOpen: true, closeTime: '18:00', district: 'Eimsbüttel (0.7 km)',
-    heroImages: ['/images/cafeLocal.jpg', '/images/cafe2.jpg', '/images/cafe3.jpg'],
-    deals: [
-      {
-        id: 'd1', title: '15% OFF Brunch', avgPrice: '€18', duration: 'Limited',
-        description: 'Get 15% off our full brunch set. Includes coffee, juice, eggs and seasonal sides. Weekends only.',
-        popularCount: 23, bgColor: '#11301d',
-        users: [{ src: '/images/avatarWomanoriente.jpg', alt: 'L' }, { src: '/images/avatarManGlasses.jpg', alt: 'T' }],
-        userNames: 'Luna & Tobias',
-        tags: [{ icon: '✓', label: 'great taste' }, { icon: '✓', label: 'value/quality' }],
-        reviewCount: 21,
-        avgRating: 4.8, trustedPartner: true, fires: 2,
-      },
-    ],
-    reviews: [
-      {
-        name: 'Johanna', avatar: '/images/avatarWomanoriente.jpg', isInitial: false, initial: 'J', bgColor: '',
-        rating: 5, date: '3 weeks ago',
-        text: 'Best brunch in Hamburg! The deal makes it even more affordable. Love the atmosphere and the coffee. Absolutely coming back every weekend.',
-        photos: ['/images/coffe.jpg', '/images/cafelocal2.jpg'], likes: 14,
-      },
-      {
-        name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
-        rating: 2, date: '1 week ago', text: 'War super lecker', photos: [], likes: 3,
-      },
-    ],
-    address: 'Eppendorfer Weg 15, 20259 Hamburg\nEimsbüttel (0.7 km away)',
-    hours: 'Open · Closes at 18:00',
-    mapBbox: '9.955,53.568,9.975,53.583',
-    similar: [
-      { id: 'r6', name: "Dude's Coffee & Cake", photo: '/images/postres.jpg', redemptions: '350+', rating: 4.4, reviewCount: 97, distance: '30 m', categories: 'Café, Desserts', deals: [{ discount: '1 FREE', label: 'Cake' }] },
-      { id: 'r3', name: 'Pasta & Alma', photo: '/images/pastasPlato.jpg', redemptions: '200+', rating: 4.7, reviewCount: 254, distance: '90 m', categories: 'Italian, Pasta', deals: [{ discount: '2for1', label: 'Cake' }] },
-    ],
-  },
-  r3: {
-    name: 'Pasta & Alma', rating: 4.7, reviewCount: 254,
-    categories: 'Italian · Pasta', priceLevel: '€€€',
-    isOpen: true, closeTime: '23:00', district: 'Harvestehude (1.1 km)',
-    heroImages: ['/images/pastasPlato.jpg', '/images/pastas2.jpg', '/images/pastas7.jpg'],
-    deals: [
-      {
-        id: 'd1', title: '2for1 Cake', avgPrice: '€16', duration: 'Limited',
-        description: 'Order any two coffee and cake combos and pay only for one. Perfect for a midday break with friends.',
-        popularCount: 18, bgColor: '#11301d',
-        users: [{ src: '/images/avatarWoman4.jpg', alt: 'A' }, { src: '/images/avatarwoman3.jpg', alt: 'C' }],
-        userNames: 'Ana & Carla',
-        tags: [{ icon: '✓', label: 'great taste' }, { icon: '✓', label: 'value/quality' }],
-        reviewCount: 19,
-        avgRating: 4.7, trustedPartner: true, fires: 2,
-      },
-      {
-        id: 'd2', title: '25% OFF Wine', avgPrice: '€28', duration: '90 days',
-        description: 'Get 25% off any wine bottle with your pasta dinner. Select from our curated Italian wine list.',
-        popularCount: 12, bgColor: '#53f293',
-        users: [{ src: '/images/avatarManr.jpg', alt: 'P' }, { src: '/images/avatarWomanBW.jpg', alt: 'N' }],
-        userNames: 'Pablo & Nina',
-        tags: [{ icon: '✓', label: 'great taste' }],
-        reviewCount: 14,
-        avgRating: 4.6, trustedPartner: false, fires: 1,
-      },
-    ],
-    reviews: [
-      {
-        name: 'Johanna', avatar: '/images/avatarWoman4.jpg', isInitial: false, initial: 'J', bgColor: '',
-        rating: 5, date: '3 weeks ago',
-        text: 'Absolutely divine pasta! The deal is incredible value. Romantic atmosphere perfect for date night. Will definitely return.',
-        photos: ['/images/pazzas.jpg', '/images/pastasPlato.jpg'], likes: 22,
-      },
-      {
-        name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
-        rating: 2, date: '1 week ago', text: 'War super lecker', photos: [], likes: 6,
-      },
-    ],
-    address: 'Mittelweg 45, 20149 Hamburg\nHarvestehude (1.1 km away)',
-    hours: 'Open · Closes at 23:00',
-    mapBbox: '9.975,53.567,9.995,53.582',
-    similar: [
-      { id: 'r2', name: 'Café Moderno', photo: '/images/cafeLocal.jpg', redemptions: '500+', rating: 4.6, reviewCount: 198, distance: '25 m', categories: 'Café, Brunch', deals: [{ discount: '15% OFF', label: 'Brunch' }] },
-      { id: 'r6', name: "Dude's Coffee & Cake", photo: '/images/postres.jpg', redemptions: '200+', rating: 4.4, reviewCount: 97, distance: '80 m', categories: 'Café, Desserts', deals: [{ discount: '1 FREE', label: 'Cake' }] },
-    ],
-  },
-  r4: {
-    name: 'Verde Saladbar', rating: 4.5, reviewCount: 143,
-    categories: 'Healthy · Salads', priceLevel: '€',
-    isOpen: true, closeTime: '20:00', district: 'Rotherbaum (0.5 km)',
-    heroImages: ['/images/salads.jpg', '/images/salad3.jpg', '/images/salad4.jpg'],
-    deals: [
-      {
-        id: 'd1', title: '10% OFF Bowl', avgPrice: '€12', duration: 'Limited',
-        description: 'Get 10% off any power bowl with a drink. Mix and match your toppings from our fresh daily selection.',
-        popularCount: 12, bgColor: '#11301d',
-        users: [{ src: '/images/avatarwomanpeliroja.jpg', alt: 'E' }, { src: '/images/avatarManColor.jpg', alt: 'K' }],
-        userNames: 'Emma & Klaus',
-        tags: [{ icon: '✓', label: 'great taste' }, { icon: '✓', label: 'value/quality' }],
-        reviewCount: 15,
-        avgRating: 4.5, trustedPartner: true, fires: 1,
-      },
-    ],
-    reviews: [
-      {
-        name: 'Johanna', avatar: '/images/avatarwomanpeliroja.jpg', isInitial: false, initial: 'J', bgColor: '',
-        rating: 5, date: '3 weeks ago',
-        text: 'Best salad bar in town! Fresh ingredients, great variety. The bowl + drink deal is perfect for a quick healthy weekday lunch.',
-        photos: ['/images/saladplato.jpg', '/images/platovegetariano.jpg'], likes: 9,
-      },
-      {
-        name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
-        rating: 2, date: '1 week ago', text: 'War super lecker', photos: [], likes: 2,
-      },
-    ],
-    address: 'Grindelallee 32, 20146 Hamburg\nRotherbaum (0.5 km away)',
-    hours: 'Open · Closes at 20:00',
-    mapBbox: '9.982,53.566,10.002,53.581',
-    similar: [
-      { id: 'r2', name: 'Café Moderno', photo: '/images/cafeLocal.jpg', redemptions: '700+', rating: 4.6, reviewCount: 198, distance: '25 m', categories: 'Café, Brunch', deals: [{ discount: '15% OFF', label: 'Brunch' }, { discount: '1 FREE', label: 'Coffee' }] },
-      { id: 'r3', name: 'Pasta & Alma', photo: '/images/pastasPlato.jpg', redemptions: '200+', rating: 4.7, reviewCount: 254, distance: '80 m', categories: 'Italian, Pasta', deals: [{ discount: '2for1', label: 'Cake' }] },
-    ],
-  },
-  r5: {
-    name: 'La Brasa', rating: 4.9, reviewCount: 421,
-    categories: 'Argentine · Steakhouse', priceLevel: '€€€€',
-    isOpen: true, closeTime: '23:30', district: 'Bahrenfeld (1.4 km)',
-    heroImages: ['/images/platoCarne.jpg', '/images/platoCarne2.jpg', '/images/carneEnsalada.jpg'],
-    deals: [
-      {
-        id: 'd1', title: '20% OFF Asado', avgPrice: '€35', duration: 'Limited',
-        description: 'Get 20% off our signature asado menu for two. Includes mixed grill platter, sides and chimichurri sauce.',
-        popularCount: 9, bgColor: '#11301d',
-        users: [{ src: '/images/avatarWoman.jpg', alt: 'M' }, { src: '/images/avatarman2.jpg', alt: 'J' }],
-        userNames: 'María & Jorge',
-        tags: [{ icon: '✓', label: 'great taste' }, { icon: '✓', label: 'value/quality' }],
-        reviewCount: 31,
-        avgRating: 4.9, trustedPartner: true, fires: 3,
-      },
-    ],
-    reviews: [
-      {
-        name: 'Johanna', avatar: '/images/avatarWoman.jpg', isInitial: false, initial: 'J', bgColor: '',
-        rating: 5, date: '3 weeks ago',
-        text: 'The best steak I have ever had in Hamburg! The asado deal is incredible — perfectly cooked meat and outstanding service. Worth every cent.',
-        photos: ['/images/BurgerCarnesPastas.jpg', '/images/carnesCafePostres.jpg'], likes: 28,
-      },
-      {
-        name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
-        rating: 2, date: '1 week ago', text: 'War super lecker', photos: [], likes: 11,
-      },
-    ],
-    address: 'Bahrenfelder Chaussee 12, 22761 Hamburg\nBahrenfeld (1.4 km away)',
-    hours: 'Open · Closes at 23:30',
-    mapBbox: '9.920,53.555,9.940,53.570',
-    similar: [
-      { id: 'r1', name: 'Brava Burger Co.', photo: '/images/burger.jpg', redemptions: '700+', rating: 4.8, reviewCount: 312, distance: '25 m', categories: 'Burgers, Asian', deals: [{ discount: '2for1', label: 'Burger' }, { discount: '1 FREE', label: 'Fries' }] },
-      { id: 'r3', name: 'Pasta & Alma', photo: '/images/pastasPlato.jpg', redemptions: '200+', rating: 4.7, reviewCount: 254, distance: '80 m', categories: 'Italian, Pasta', deals: [{ discount: '2for1', label: 'Cake' }] },
-    ],
-  },
-  r6: {
-    name: "Dude's Coffee & Cake", rating: 4.4, reviewCount: 97,
-    categories: 'Café · Desserts', priceLevel: '€',
-    isOpen: true, closeTime: '19:00', district: 'Eimsbüttel (0.9 km)',
-    heroImages: ['/images/postres.jpg', '/images/postresCafe.jpg', '/images/Cafe7.jpg'],
-    deals: [
-      {
-        id: 'd1', title: '1 FREE Cake', avgPrice: '€8', duration: '30 days',
-        description: 'Get one free cake slice with any coffee order. Choose from our daily baked selection of cakes and tarts.',
-        popularCount: 7, bgColor: '#11301d',
-        users: [{ src: '/images/avatarwomensmile.jpg', alt: 'J' }, { src: '/images/avatarWomanBW.jpg', alt: 'F' }],
-        userNames: 'Jana & Frieda',
-        tags: [{ icon: '✓', label: 'great taste' }],
-        reviewCount: 12,
-        avgRating: 4.8, trustedPartner: true, fires: 2,
-      },
-    ],
-    reviews: [
-      {
-        name: 'Johanna', avatar: '/images/avatarwomensmile.jpg', isInitial: false, initial: 'J', bgColor: '',
-        rating: 5, date: '3 weeks ago',
-        text: 'Such a cozy café! The free cake deal is so generous. The lemon tart is absolutely divine. Will become a regular here.',
-        photos: ['/images/postres.jpg', '/images/postresCafe.jpg'], likes: 8,
-      },
-      {
-        name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
-        rating: 2, date: '1 week ago', text: 'War super lecker', photos: [], likes: 3,
-      },
-    ],
-    address: 'Sillemstr. 22, 20257 Hamburg\nEimsbüttel (0.9 km away)',
-    hours: 'Open · Closes at 19:00',
-    mapBbox: '9.960,53.570,9.980,53.585',
-    similar: [
-      { id: 'r2', name: 'Café Moderno', photo: '/images/cafeLocal.jpg', redemptions: '700+', rating: 4.6, reviewCount: 198, distance: '25 m', categories: 'Café, Brunch', deals: [{ discount: '15% OFF', label: 'Brunch' }, { discount: '1 FREE', label: 'Coffee' }] },
-      { id: 'r3', name: 'Pasta & Alma', photo: '/images/pastasPlato.jpg', redemptions: '200+', rating: 4.7, reviewCount: 254, distance: '80 m', categories: 'Italian, Pasta', deals: [{ discount: '2for1', label: 'Cake' }] },
-    ],
-  },
-}
+import { RESTAURANT_MAP, type FullDeal, type Review, type SimilarRestaurant } from '@/lib/restaurants'
 
 /* ─── Page ───────────────────────────────────────────────────────────── */
 export default function RestaurantDetailPage() {
   const params  = useParams()
   const router  = useRouter()
   const id      = params.id as string
-  const detail  = DETAILS[id]
+  const detail  = RESTAURANT_MAP[id]
   const [activeTab, setActiveTab] = useState<'overview' | 'reviews' | 'about'>('overview')
 
   if (!detail) {
@@ -325,7 +50,7 @@ export default function RestaurantDetailPage() {
 
         {/* Rating · categories · price */}
         <div style={{ fontSize: 13, fontWeight: 500, color: '#6b7280', marginBottom: 3 }}>
-          ⭐ {detail.rating} ({detail.reviewCount}) · {detail.categories} · {detail.priceLevel}
+          ⭐ {detail.rating} ({detail.reviews}) · {detail.categories} · {'€'.repeat(detail.priceLevel)}
         </div>
 
         {/* Status */}
@@ -399,7 +124,7 @@ export default function RestaurantDetailPage() {
         {showDeals && (
           <>
             <SectionHeader title="Deals" showInfo />
-            {detail.deals.map((deal) => <DealCard key={deal.id} deal={{ ...deal, restaurantId: id }} />)}
+            {detail.fullDeals.map((deal) => <DealCard key={deal.id} deal={deal} />)}
           </>
         )}
 
@@ -411,7 +136,7 @@ export default function RestaurantDetailPage() {
               <span style={{ fontSize: 40, fontWeight: 800, color: '#111827', lineHeight: 1 }}>{detail.rating}</span>
               <StarRating rating={5} size={22} />
             </div>
-            {detail.reviews.map((review, i) => <ReviewCard key={i} review={review} />)}
+            {detail.reviewsList.map((review, i) => <ReviewCard key={i} review={review} />)}
             <button style={{
               width: '100%', padding: '13px', marginTop: 4, marginBottom: 8,
               border: '1px solid #e5e7eb', borderRadius: 12,
@@ -512,7 +237,7 @@ function SectionHeader({ title, showInfo }: { title: string; showInfo?: boolean 
 }
 
 /* ─── Deal Card ──────────────────────────────────────────────────────── */
-function DealCard({ deal }: { deal: Deal }) {
+function DealCard({ deal }: { deal: FullDeal }) {
   const router  = useRouter()
   const isLight = deal.bgColor === '#53f293'
   const txtSub  = isLight ? '#1a5c35' : '#d1fae5'
