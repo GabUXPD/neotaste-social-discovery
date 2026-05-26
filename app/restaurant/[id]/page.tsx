@@ -303,29 +303,19 @@ export default function RestaurantDetailPage() {
   const showReviews = activeTab === 'overview' || activeTab === 'reviews'
   const showAbout   = activeTab === 'overview' || activeTab === 'about'
   const showSimilar = activeTab === 'overview'
-  const isBooked    = detail.deals.some((d) => d.booked === true)
 
   return (
     <div style={{ width: '100%', minHeight: '100dvh', background: '#ffffff', overflowY: 'auto', paddingBottom: 40, fontFamily: 'Poppins, sans-serif' }}>
 
       {/* ── HEADER ───────────────────────────────────────────────────── */}
       <div style={{ padding: '52px 16px 0' }}>
-        {/* Back + Booked badge row */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 12 }}>
+        {/* Back row */}
+        <div style={{ display: 'flex', alignItems: 'center', paddingBottom: 12 }}>
           <button onClick={() => router.back()} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0', display: 'flex', alignItems: 'center' }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111827" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M19 12H5M12 5l-7 7 7 7"/>
             </svg>
           </button>
-          {isBooked && (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#53f293" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="3" ry="3"/>
-                <polyline points="9 11 12 14 22 4"/>
-              </svg>
-              <span style={{ fontSize: 10, fontWeight: 500, color: '#145b32', lineHeight: '12px' }}>Booked</span>
-            </div>
-          )}
         </div>
 
         {/* Name */}
@@ -545,17 +535,15 @@ function DealCard({ deal }: { deal: Deal }) {
       {/* ── Header row: title + chips ─────────────────────────────── */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 10 }}>
         <div style={{ fontSize: 20, fontWeight: 700, color: isLight ? '#0a0a0a' : '#53f293', flex: 1, lineHeight: '26px' }}>
-          ⚡ {deal.title}
+          {!isLight && '⚡ '}{deal.title}
         </div>
         <div style={{ display: 'flex', gap: 4, flexShrink: 0, marginTop: 2 }}>
           <span style={{ fontSize: 11, fontWeight: 600, color: chipClr, borderRadius: 9999, padding: '3px 8px', border: `1px solid ${chipBdr}`, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
-            🔥 Avg. {deal.avgRating}
+            🎁 Avg. {deal.avgPrice}
           </span>
-          {deal.trustedPartner && (
-            <span style={{ fontSize: 11, fontWeight: 600, color: chipClr, borderRadius: 9999, padding: '3px 8px', border: `1px solid ${chipBdr}`, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
-              💬 Trusted partner
-            </span>
-          )}
+          <span style={{ fontSize: 11, fontWeight: 600, color: chipClr, borderRadius: 9999, padding: '3px 8px', border: `1px solid ${chipBdr}`, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+            🔄 {deal.duration}
+          </span>
         </div>
       </div>
 
@@ -575,7 +563,7 @@ function DealCard({ deal }: { deal: Deal }) {
             ))}
           </span>
           <span style={{ fontSize: 13, fontWeight: 700, color: '#ffffff' }}>
-            {deal.popularCount} Popular this week
+            Popular this week
           </span>
         </div>
 
@@ -589,7 +577,7 @@ function DealCard({ deal }: { deal: Deal }) {
                 </div>
               ))}
             </div>
-            <span style={{ fontSize: 12, fontWeight: 600, color: '#ffffff' }}>{deal.userNames}</span>
+            <span style={{ fontSize: 12, fontWeight: 600, color: '#ffffff' }}>{deal.userNames} recommend it</span>
           </div>
           <button style={{ background: 'rgba(254,254,254,0.05)', border: 'none', borderRadius: 9999, padding: '5px 10px', fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,0.6)', cursor: 'pointer', flexShrink: 0 }}>
             See review
