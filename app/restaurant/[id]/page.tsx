@@ -328,7 +328,7 @@ function DealCard({ deal, hasSocial, bookedDealId }: { deal: FullDeal; hasSocial
             ))}
           </span>
           <span style={{ fontSize: 13, fontWeight: 700, color: '#ffffff' }}>
-            Popular this week
+            {deal.popularCount} booked this week
           </span>
         </div>
 
@@ -360,7 +360,7 @@ function DealCard({ deal, hasSocial, bookedDealId }: { deal: FullDeal; hasSocial
         {/* Based on X reviews — solo si no hay social */}
         {!hasSocial && (
           <div style={{ marginTop: 4, fontSize: 10, fontWeight: 500, color: isLight ? '#bafad4' : '#53f293' }}>
-            Based on {deal.reviewCount} reviews
+            Based on {deal.reviewCount} NeoTaste ratings
           </div>
         )}
       </div>

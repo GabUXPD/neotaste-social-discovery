@@ -59,11 +59,102 @@ export interface Restaurant {
   similar: SimilarRestaurant[]
 }
 
-/* ─── Shared review templates ────────────────────────────────────────────── */
-const tungAnh: Review = {
+/* ─── Per-restaurant second reviews (Tung Anh — unique, English, rating ≥ 4) */
+const tungAnhR1: Review = {
   name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
-  rating: 2, date: '1 week ago', text: 'War super lecker', photos: [], likes: 4,
-  tags: [{ icon: '👌', label: 'great taste' }],
+  rating: 4, date: '1 week ago',
+  text: 'Great spot for afternoon coffee. The cake selection changes weekly and it\'s always fresh. Will come back.',
+  photos: [], likes: 4, tags: [{ icon: '👌', label: 'great taste' }],
+}
+const tungAnhR2: Review = {
+  name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
+  rating: 4, date: '1 week ago',
+  text: 'Love the harbour views and relaxed atmosphere. Coffee is consistently good every visit.',
+  photos: [], likes: 5, tags: [{ icon: '👌', label: 'great taste' }],
+}
+const tungAnhR3: Review = {
+  name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
+  rating: 4, date: '2 weeks ago',
+  text: 'Unique spot inside a historic building. The 2for1 deal makes it even better. Atmosphere is one of a kind.',
+  photos: [], likes: 6, tags: [{ icon: '👌', label: 'great taste' }],
+}
+const tungAnhR4: Review = {
+  name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
+  rating: 5, date: '3 days ago',
+  text: 'The smash burgers are addictive — crispy edges, juicy centre. The beer deal pairs perfectly with any order.',
+  photos: [], likes: 9, tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
+}
+const tungAnhR5: Review = {
+  name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
+  rating: 4, date: '1 week ago',
+  text: 'Really solid Italian food in Hamburg. Fresh handmade pasta makes a noticeable difference. Perfect for a weeknight dinner.',
+  photos: [], likes: 7, tags: [{ icon: '👌', label: 'great taste' }],
+}
+const tungAnhR6: Review = {
+  name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
+  rating: 4, date: '5 days ago',
+  text: 'Best quick lunch option nearby. Bowls are filling and fresh, staff is always friendly.',
+  photos: [], likes: 3, tags: [{ icon: '👌', label: 'great taste' }],
+}
+const tungAnhR7: Review = {
+  name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
+  rating: 4, date: '4 days ago',
+  text: 'Cosy brunch atmosphere and fluffy pancakes. The 2for1 deal makes weekend mornings much better.',
+  photos: [], likes: 5, tags: [{ icon: '👌', label: 'great taste' }],
+}
+const tungAnhR8: Review = {
+  name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
+  rating: 5, date: '2 weeks ago',
+  text: 'Impressive sushi quality for Hamburg. The chef\'s selection never disappoints — fresh fish, perfect rice temperature.',
+  photos: [], likes: 11, tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
+}
+const tungAnhR9: Review = {
+  name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
+  rating: 4, date: '1 week ago',
+  text: 'Solid tacos and great value. The house-made salsa verde is fresh and the portions are generous.',
+  photos: [], likes: 6, tags: [{ icon: '👌', label: 'great taste' }],
+}
+const tungAnhR10: Review = {
+  name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
+  rating: 4, date: '3 weeks ago',
+  text: 'Good plant-based options with fresh, local ingredients. Portion sizes are generous for the price.',
+  photos: [], likes: 4, tags: [{ icon: '👌', label: 'great taste' }],
+}
+const tungAnhR11: Review = {
+  name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
+  rating: 4, date: '6 days ago',
+  text: 'Perfect after-work spot. Big outdoor space, solid beer selection, and the 2for1 deal is a great bonus.',
+  photos: [], likes: 8, tags: [{ icon: '👌', label: 'great taste' }],
+}
+const tungAnhR12: Review = {
+  name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
+  rating: 4, date: '2 weeks ago',
+  text: 'The sourdough crust is excellent — proper Neapolitan style, not easy to find in Hamburg. Toppings are generous.',
+  photos: [], likes: 7, tags: [{ icon: '👌', label: 'great taste' }],
+}
+const tungAnhR13: Review = {
+  name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
+  rating: 5, date: '1 week ago',
+  text: 'Exceptional dim sum. Har gow wrappers are paper thin and the filling is generous. Best in the city by far.',
+  photos: [], likes: 14, tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
+}
+const tungAnhR14: Review = {
+  name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
+  rating: 4, date: '2 weeks ago',
+  text: 'Authentic spice blends and generous portions. The naan is baked fresh to order — warm and perfectly soft.',
+  photos: [], likes: 6, tags: [{ icon: '👌', label: 'great taste' }],
+}
+const tungAnhR15: Review = {
+  name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
+  rating: 5, date: '3 days ago',
+  text: 'Finally proper laminated pastry in Hamburg. Comes out warm and perfectly flaky. Worth every detour.',
+  photos: [], likes: 8, tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
+}
+const tungAnhR16: Review = {
+  name: 'Tung Anh', avatar: '', isInitial: true, initial: 'T', bgColor: '#0d9488',
+  rating: 4, date: '5 days ago',
+  text: 'Rich, deeply flavoured broth. The 18-hour tonkotsu is worth the wait — layers of flavour in every spoonful.',
+  photos: [], likes: 10, tags: [{ icon: '👌', label: 'great taste' }],
 }
 
 /* ─── Data ───────────────────────────────────────────────────────────────── */
@@ -120,7 +211,7 @@ export const RESTAURANTS: Restaurant[] = [
         photos: ['/images/postres.jpg', '/images/postresCafe.jpg'], likes: 8,
         tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
-      tungAnh,
+      tungAnhR1,
     ],
     address: 'Sillemstr. 22, 20257 Hamburg\nEimsbüttel (4.5 km away)',
     hours: 'Open · Closes at 19:00',
@@ -177,7 +268,7 @@ export const RESTAURANTS: Restaurant[] = [
         photos: ['/images/coffe.jpg', '/images/cafelocal2.jpg'], likes: 14,
         tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
-      tungAnh,
+      tungAnhR2,
     ],
     address: 'Am Kaiserkai 10, 20457 Hamburg\nHafenCity (4.5 km away)',
     hours: 'Open · Closes at 18:00',
@@ -237,7 +328,7 @@ export const RESTAURANTS: Restaurant[] = [
         photos: ['/images/Cafe7.jpg', '/images/cafelocal2.jpg'], likes: 11,
         tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
-      tungAnh,
+      tungAnhR3,
     ],
     address: 'Adolphsplatz 1, 20457 Hamburg\nAltstadt (4.0 km away)',
     hours: 'Open · Closes at 17:00',
@@ -293,7 +384,7 @@ export const RESTAURANTS: Restaurant[] = [
         photos: ['/images/burger3.jpg', '/images/burgercoke.jpg'], likes: 16,
         tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
-      tungAnh,
+      tungAnhR4,
     ],
     address: 'Schulterblatt 58, 20357 Hamburg\nSchanzenviertel (0.3 km away)',
     hours: 'Open · Closes at 22:00',
@@ -349,7 +440,7 @@ export const RESTAURANTS: Restaurant[] = [
         photos: ['/images/pazzas.jpg', '/images/pastasPlato.jpg'], likes: 22,
         tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
-      tungAnh,
+      tungAnhR5,
     ],
     address: 'Mittelweg 45, 20149 Hamburg\nHarvestehude (1.1 km away)',
     hours: 'Open · Closes at 23:00',
@@ -396,7 +487,7 @@ export const RESTAURANTS: Restaurant[] = [
         photos: ['/images/saladplato.jpg', '/images/platovegetariano.jpg'], likes: 9,
         tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
-      tungAnh,
+      tungAnhR6,
     ],
     address: 'Grindelallee 32, 20146 Hamburg\nRotherbaum (0.5 km away)',
     hours: 'Open · Closes at 20:00',
@@ -452,7 +543,7 @@ export const RESTAURANTS: Restaurant[] = [
         photos: ['/images/buerger2.jpg', '/images/burgercoke.jpg'], likes: 13,
         tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
-      tungAnh,
+      tungAnhR7,
     ],
     address: 'Eppendorfer Baum 23, 20249 Hamburg\nEppendorf (1.8 km away)',
     hours: 'Open · Closes at 15:00',
@@ -508,7 +599,7 @@ export const RESTAURANTS: Restaurant[] = [
         photos: ['/images/pastas2.jpg', '/images/pastasPlato.jpg'], likes: 19,
         tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
-      tungAnh,
+      tungAnhR8,
     ],
     address: 'Mühlenkamp 14, 22303 Hamburg\nWinterhude (2.3 km away)',
     hours: 'Open · Closes at 22:30',
@@ -565,7 +656,7 @@ export const RESTAURANTS: Restaurant[] = [
         photos: ['/images/burger.jpg', '/images/burgercoke.jpg'], likes: 17,
         tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
-      tungAnh,
+      tungAnhR9,
     ],
     address: 'Altona Bahnhof Str. 5, 22765 Hamburg\nAltona (0.9 km away)',
     hours: 'Open · Closes at 23:00',
@@ -612,7 +703,7 @@ export const RESTAURANTS: Restaurant[] = [
         photos: ['/images/salads.jpg', '/images/platovegetariano.jpg'], likes: 7,
         tags: [{ icon: '👌', label: 'great taste' }],
       },
-      tungAnh,
+      tungAnhR10,
     ],
     address: 'Fuhlsbüttler Str. 102, 22305 Hamburg\nBarmbek (3.1 km away)',
     hours: 'Open · Closes at 20:00',
@@ -669,7 +760,7 @@ export const RESTAURANTS: Restaurant[] = [
         photos: ['/images/cafeLocal.jpg', '/images/cafelocal2.jpg'], likes: 21,
         tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
-      tungAnh,
+      tungAnhR11,
     ],
     address: 'Große Bergstr. 40, 22767 Hamburg\nAltona (1.4 km away)',
     hours: 'Open · Closes at 23:00',
@@ -725,7 +816,7 @@ export const RESTAURANTS: Restaurant[] = [
         photos: ['/images/pastasPlato.jpg', '/images/pazzas.jpg'], likes: 15,
         tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
-      tungAnh,
+      tungAnhR12,
     ],
     address: 'Hoheluftchaussee 55, 20253 Hamburg\nEimsbüttel (0.7 km away)',
     hours: 'Open · Closes at 22:00',
@@ -785,7 +876,7 @@ export const RESTAURANTS: Restaurant[] = [
         photos: ['/images/cafelocal2.jpg', '/images/cafeLocal.jpg'], likes: 31,
         tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
-      tungAnh,
+      tungAnhR13,
     ],
     address: 'Wandsbeker Marktstr. 8, 22041 Hamburg\nWandsbek (2.7 km away)',
     hours: 'Open · Closes at 22:00',
@@ -841,7 +932,7 @@ export const RESTAURANTS: Restaurant[] = [
         photos: ['/images/Cafe7.jpg', '/images/cafelocal2.jpg'], likes: 18,
         tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
-      tungAnh,
+      tungAnhR14,
     ],
     address: 'Süderstr. 77, 20537 Hamburg\nHammerbrook (1.6 km away)',
     hours: 'Open · Closes at 22:30',
@@ -897,7 +988,7 @@ export const RESTAURANTS: Restaurant[] = [
         photos: ['/images/cafe2.jpg', '/images/cafeLocal.jpg'], likes: 12,
         tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
-      tungAnh,
+      tungAnhR15,
     ],
     address: 'Lokstedter Weg 68, 22529 Hamburg\nLokstedt (2.0 km away)',
     hours: 'Open · Closes at 18:00',
@@ -953,7 +1044,7 @@ export const RESTAURANTS: Restaurant[] = [
         photos: ['/images/pastasPlato.jpg', '/images/pastas2.jpg'], likes: 24,
         tags: [{ icon: '👌', label: 'great taste' }, { icon: '💯', label: 'value/quality' }],
       },
-      tungAnh,
+      tungAnhR16,
     ],
     address: 'Stellinger Weg 14, 20255 Hamburg\nEimsbüttel (1.2 km away)',
     hours: 'Open · Closes at 22:30',
