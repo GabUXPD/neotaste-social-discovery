@@ -38,9 +38,10 @@ interface PeekCardProps {
   restaurant: Restaurant
   onClose: () => void
   onViewDetail: () => void
+  isBooked?: boolean
 }
 
-export default function PeekCard({ restaurant, onClose, onViewDetail }: PeekCardProps) {
+export default function PeekCard({ restaurant, onClose, onViewDetail, isBooked = false }: PeekCardProps) {
   const [showTooltip, setShowTooltip] = useState(false)
   const hasFriends = restaurant.friends && restaurant.friends.length > 0
   const extraFriends = hasFriends ? Math.max(0, restaurant.friends.length - 2) : 0
@@ -97,7 +98,24 @@ export default function PeekCard({ restaurant, onClose, onViewDetail }: PeekCard
       </div>
 
       {/* ── Info ──────────────────────────────────────────────────────── */}
-      <div style={{ flex: 1, minWidth: 0 }}>
+      <div style={{ flex: 1, minWidth: 0, position: 'relative' }}>
+
+        {/* Booked badge — top-right corner */}
+        {isBooked && (
+          <div style={{
+            position: 'absolute', top: -8, right: 0,
+            display: 'flex', flexDirection: 'column', alignItems: 'center',
+            gap: 1, padding: 4,
+          }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <rect x="2" y="2" width="20" height="20" rx="5" fill="#53f293"/>
+              <polyline points="6 12 10 16 18 8" stroke="#145b32" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span style={{ fontSize: 10, fontWeight: 500, color: '#145b32', lineHeight: '12px', whiteSpace: 'nowrap' }}>
+              Booked
+            </span>
+          </div>
+        )}
 
         {/* Nombre */}
         <div style={{ fontSize: 14, fontWeight: 600, color: '#0a0a0a', lineHeight: '18px', marginBottom: 2 }}>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import PeekCard from '@/components/PeekCard'
@@ -51,8 +51,14 @@ export default function DiscoverPage() {
   const router        = useRouter()
   const [selectedPin, setSelectedPin]     = useState<string | null>(null)
   const [sheetExpanded, setSheetExpanded] = useState(false)
-  const [activeFilter, setActiveFilter]   = useState(-1)    // none active by default
+  const [activeFilter, setActiveFilter]   = useState(-1)
   const [activeTab,    setActiveTab]      = useState(2)
+  const [bookedIds,    setBookedIds]      = useState<Set<string>>(new Set())
+
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem('neotaste_booked') ?? '[]') as string[]
+    setBookedIds(new Set(stored))
+  }, [])
 
   const activeRestaurant = RESTAURANTS.find((r) => r.id === selectedPin) ?? null
 
@@ -73,6 +79,7 @@ export default function DiscoverPage() {
           key={r.id}
           restaurant={r}
           isSelected={selectedPin === r.id}
+          isBooked={bookedIds.has(r.id)}
           onTap={() => handlePinTap(r.id)}
         />
       ))}
@@ -85,6 +92,7 @@ export default function DiscoverPage() {
           left={p.left}
           fires={p.fires}
           isSelected={selectedPin === p.restaurantId}
+          isBooked={bookedIds.has(p.restaurantId)}
           onTap={() => handlePinTap(p.restaurantId)}
         />
       ))}
@@ -114,6 +122,7 @@ export default function DiscoverPage() {
           expanded={sheetExpanded}
           onToggle={() => setSheetExpanded(!sheetExpanded)}
           onRestaurantTap={(id) => router.push(`/restaurant/${id}`)}
+          bookedIds={bookedIds}
         />
       )}
 
@@ -123,6 +132,7 @@ export default function DiscoverPage() {
           restaurant={activeRestaurant}
           onClose={() => setSelectedPin(null)}
           onViewDetail={() => router.push(`/restaurant/${activeRestaurant.id}`)}
+          isBooked={bookedIds.has(activeRestaurant.id)}
         />
       )}
 
@@ -190,33 +200,40 @@ function MapBackground() {
 function RestaurantPin({
   restaurant: r,
   isSelected,
+  isBooked,
   onTap,
 }: {
   restaurant: Restaurant
   isSelected: boolean
+  isBooked: boolean
   onTap: () => void
 }) {
   const fires = r.pin.fires
-  // Slightly enlarge when selected for visual feedback
-  const W = isSelected ? 30 : 24
-  const H = isSelected ? 40 : 32
+  const [isPressed, setIsPressed] = useState(false)
+
+  // Size: pressed-booked → 32×42.667 | selected → 30×40 | default → 24×32
+  const W = (isPressed && isBooked) ? 32 : isSelected ? 30 : 24
+  const H = (isPressed && isBooked) ? 42.667 : isSelected ? 40 : 32
 
   return (
     <button
       onClick={onTap}
+      onPointerDown={() => setIsPressed(true)}
+      onPointerUp={() => setIsPressed(false)}
+      onPointerLeave={() => setIsPressed(false)}
       style={{
         position: 'absolute', top: r.pin.top, left: r.pin.left,
         transform: 'translate(-50%, -100%)',
         display: 'flex', flexDirection: 'column', alignItems: 'center',
         border: 'none', background: 'none', cursor: 'pointer', padding: 0,
         zIndex: isSelected ? 19 : 15,
-        transition: 'transform 0.15s ease',
+        transition: 'width 0.1s ease, height 0.1s ease',
       }}
     >
       {/* Pin + badge container */}
       <div style={{ position: 'relative', width: W, height: H }}>
 
-        {/* ── Teardrop pin body (24×32 from Figma) ── */}
+        {/* ── Teardrop pin body ── */}
         <svg
           width={W} height={H}
           viewBox="0 0 24 32"
@@ -227,7 +244,13 @@ function RestaurantPin({
             d="M12 0C5.37 0 0 5.37 0 12C0 20.5 12 32 12 32C12 32 24 20.5 24 12C24 5.37 18.63 0 12 0Z"
             fill={isSelected ? '#2d9e58' : '#53f293'}
           />
-          {fires === 0 ? (
+          {isBooked ? (
+            /* Checkmark — booked state */
+            <>
+              <circle cx="12" cy="12" r="8" fill="#ffffff" opacity="0.9"/>
+              <polyline points="8 12 11 15 16.5 9" stroke="#145b32" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+            </>
+          ) : fires === 0 ? (
             /* N logo — regular pin */
             <text
               x="12" y="13"
@@ -269,20 +292,26 @@ function RestaurantPin({
 }
 
 /* ─── MapPin (interactive, linked to a restaurant) ──────────────────── */
-function MapPin({ top, left, fires, isSelected, onTap }: {
-  top: string; left: string; fires: number; isSelected: boolean; onTap: () => void
+function MapPin({ top, left, fires, isSelected, isBooked, onTap }: {
+  top: string; left: string; fires: number; isSelected: boolean; isBooked: boolean; onTap: () => void
 }) {
-  const W = isSelected ? 30 : 24
-  const H = isSelected ? 40 : 32
+  const [isPressed, setIsPressed] = useState(false)
+
+  const W = (isPressed && isBooked) ? 32 : isSelected ? 30 : 24
+  const H = (isPressed && isBooked) ? 42.667 : isSelected ? 40 : 32
+
   return (
     <button
       onClick={onTap}
+      onPointerDown={() => setIsPressed(true)}
+      onPointerUp={() => setIsPressed(false)}
+      onPointerLeave={() => setIsPressed(false)}
       style={{
         position: 'absolute', top, left,
         transform: 'translate(-50%, -100%)',
         width: W, height: H, zIndex: isSelected ? 19 : 14,
         border: 'none', background: 'none', cursor: 'pointer', padding: 0,
-        transition: 'transform 0.15s ease',
+        transition: 'width 0.1s ease, height 0.1s ease',
       }}
     >
       <svg width={W} height={H} viewBox="0 0 24 32"
@@ -291,7 +320,12 @@ function MapPin({ top, left, fires, isSelected, onTap }: {
           d="M12 0C5.37 0 0 5.37 0 12C0 20.5 12 32 12 32C12 32 24 20.5 24 12C24 5.37 18.63 0 12 0Z"
           fill={isSelected ? '#2d9e58' : '#53f293'}
         />
-        {fires === 0 ? (
+        {isBooked ? (
+          <>
+            <circle cx="12" cy="12" r="8" fill="#ffffff" opacity="0.9"/>
+            <polyline points="8 12 11 15 16.5 9" stroke="#145b32" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+          </>
+        ) : fires === 0 ? (
           <text x="12" y="13" textAnchor="middle" dominantBaseline="middle"
             fill="#1c1d28" fontSize={isSelected ? '11' : '9'} fontWeight="800" fontFamily="'Poppins', sans-serif">N</text>
         ) : (
@@ -428,10 +462,12 @@ function BottomSheet({
   expanded,
   onToggle,
   onRestaurantTap,
+  bookedIds,
 }: {
   expanded: boolean
   onToggle: () => void
   onRestaurantTap: (id: string) => void
+  bookedIds: Set<string>
 }) {
   return (
     <div
@@ -468,7 +504,7 @@ function BottomSheet({
         {RESTAURANTS.map((r, i) => (
           <div key={r.id}>
             <div onClick={() => onRestaurantTap(r.id)} style={{ cursor: 'pointer', paddingTop: 8, paddingBottom: 8 }}>
-              <ListItem r={r} />
+              <ListItem r={r} isBooked={bookedIds.has(r.id)} />
             </div>
             {i < RESTAURANTS.length - 1 && (
               <div style={{ height: 1, background: 'rgba(0,0,0,0.07)' }} />
@@ -481,7 +517,7 @@ function BottomSheet({
 }
 
 /* ─── ListItem — matches Figma list-item frame ───────────────────────── */
-function ListItem({ r }: { r: Restaurant }) {
+function ListItem({ r, isBooked = false }: { r: Restaurant; isBooked?: boolean }) {
   const hasFriends  = r.friends.length > 0
   const hasRecency  = r.recencyCount > 0
 
@@ -514,7 +550,24 @@ function ListItem({ r }: { r: Restaurant }) {
       </div>
 
       {/* Content */}
-      <div style={{ flex: 1, minWidth: 0, paddingTop: 10 }}>
+      <div style={{ flex: 1, minWidth: 0, paddingTop: 10, position: 'relative' }}>
+
+        {/* Booked badge — top-right */}
+        {isBooked && (
+          <div style={{
+            position: 'absolute', top: -2, right: 0,
+            display: 'flex', flexDirection: 'column', alignItems: 'center',
+            gap: 1,
+          }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <rect x="2" y="2" width="20" height="20" rx="5" fill="#53f293"/>
+              <polyline points="6 12 10 16 18 8" stroke="#145b32" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span style={{ fontSize: 10, fontWeight: 500, color: '#145b32', lineHeight: '12px', whiteSpace: 'nowrap' }}>
+              Booked
+            </span>
+          </div>
+        )}
 
         {/* Name */}
         <p style={{
