@@ -137,96 +137,97 @@ export default function PeekCard({ restaurant, onClose, onViewDetail, isBooked =
           ⭐ {restaurant.rating} ({restaurant.reviews}) · {restaurant.distance}
         </div>
 
-        {/* Amigos — señal personal primero */}
-        {hasFriends && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 2, marginBottom: restaurant.recencyCount >= 5 ? 4 : 8 }}>
-            <div style={{ display: 'flex' }}>
-              {restaurant.friends.slice(0, 2).map((f, i) => (
-                <div key={i} style={{
-                  width: 24, height: 24, borderRadius: 9999,
-                  border: '2px solid #ffffff',
-                  marginLeft: i > 0 ? -8 : 0,
-                  overflow: 'hidden', position: 'relative', flexShrink: 0,
-                }}>
-                  <Image src={f.src} alt={f.alt} width={24} height={24} priority style={{ objectFit: 'cover', width: 24, height: 24, borderRadius: 9999 }} />
-                </div>
-              ))}
-            </div>
-            {extraFriends > 0 && (
-              <span style={{ fontSize: 12, fontWeight: 600, color: '#08180f' }}>+{extraFriends}</span>
-            )}
-          </div>
-        )}
-
-        {/* Recency chip — señal de popularidad */}
+        {/* Recency chip + amigos */}
         {restaurant.recencyCount >= 5 && (
-          <div style={{ position: 'relative', marginBottom: 8 }}>
-            <button
-              onClick={(e) => { e.stopPropagation(); setShowTooltip(!showTooltip) }}
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 4,
-                background: showTooltip ? '#ffe645' : '#fffbc2', borderRadius: 9999,
-                padding: '4px 8px', border: 'none', cursor: 'pointer',
-              }}
-            >
-              {/* Fire emojis with -5px overlap per Figma node 100-5411 */}
-              <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-                {Array.from({ length: Math.max(1, restaurant.pin.fires) }).map((_, i, arr) => (
-                  <span key={i} style={{ fontSize: 11, lineHeight: 1, marginRight: i < arr.length - 1 ? -5 : 0 }}>🔥</span>
-                ))}
-              </span>
-              <span style={{ fontSize: 12, fontWeight: 600, color: '#0a0a0a', whiteSpace: 'nowrap' }}>
-                {restaurant.recencyCount} booked this week
-              </span>
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="2.5" strokeLinecap="round">
-                <path d="M6 9l6 6 6-6"/>
-              </svg>
-            </button>
-
-            {showTooltip && restaurant.whyTrending && (
-              <div
-                onClick={(e) => e.stopPropagation()}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 8, flexWrap: 'nowrap' }}>
+            <div style={{ position: 'relative', flexShrink: 0 }}>
+              <button
+                onClick={(e) => { e.stopPropagation(); setShowTooltip(!showTooltip) }}
                 style={{
-                  position: 'absolute', top: 'calc(100% + 6px)', left: 0,
-                  background: '#11301d', borderRadius: 12, padding: '12px 14px',
-                  width: 240, zIndex: 60,
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
+                  display: 'inline-flex', alignItems: 'center', gap: 4,
+                  background: showTooltip ? '#ffe645' : '#fffbc2', borderRadius: 9999,
+                  padding: '4px 8px', border: 'none', cursor: 'pointer',
                 }}
               >
-                <div style={{
-                  position: 'absolute', top: -5, left: 16,
-                  width: 10, height: 10, background: '#11301d',
-                  transform: 'rotate(45deg)', borderRadius: 2,
-                }} />
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-                  <span style={{ fontSize: 12, fontWeight: 700, color: '#ffe645' }}>Why it&apos;s trending</span>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); setShowTooltip(false) }}
-                    style={{
-                      width: 20, height: 20, borderRadius: 9999,
-                      background: '#53f29333', border: 'none',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      cursor: 'pointer', padding: 0, flexShrink: 0,
-                    }}
-                  >
-                    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#53f293" strokeWidth="3" strokeLinecap="round">
-                      <path d="M18 6L6 18M6 6l12 12"/>
-                    </svg>
-                  </button>
-                </div>
-                <div style={{ fontSize: 11, fontWeight: 500, color: '#ffffff', marginBottom: 10 }}>
-                  Popular in your neighborhood
-                </div>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: 16 }}>
-                  <div>
-                    <span style={{ fontSize: 18, fontWeight: 700, color: '#ffffff' }}>{restaurant.recencyCount}</span>
-                    <span style={{ fontSize: 10, fontWeight: 500, color: '#86efb2', marginLeft: 4 }}>Booked this</span>
+                {/* Fire emojis with -5px overlap per Figma node 100-5411 */}
+                <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                  {Array.from({ length: Math.max(1, restaurant.pin.fires) }).map((_, i, arr) => (
+                    <span key={i} style={{ fontSize: 11, lineHeight: 1, marginRight: i < arr.length - 1 ? -5 : 0 }}>🔥</span>
+                  ))}
+                </span>
+                <span style={{ fontSize: 12, fontWeight: 600, color: '#0a0a0a', whiteSpace: 'nowrap' }}>
+                  {restaurant.recencyCount} booked this week
+                </span>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="2.5" strokeLinecap="round">
+                  <path d="M6 9l6 6 6-6"/>
+                </svg>
+              </button>
+
+              {showTooltip && restaurant.whyTrending && (
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  style={{
+                    position: 'absolute', top: 'calc(100% + 6px)', left: 0,
+                    background: '#11301d', borderRadius: 12, padding: '12px 14px',
+                    width: 240, zIndex: 60,
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
+                  }}
+                >
+                  <div style={{
+                    position: 'absolute', top: -5, left: 16,
+                    width: 10, height: 10, background: '#11301d',
+                    transform: 'rotate(45deg)', borderRadius: 2,
+                  }} />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: '#ffe645' }}>Why it&apos;s trending</span>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setShowTooltip(false) }}
+                      style={{
+                        width: 20, height: 20, borderRadius: 9999,
+                        background: '#53f29333', border: 'none',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        cursor: 'pointer', padding: 0, flexShrink: 0,
+                      }}
+                    >
+                      <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#53f293" strokeWidth="3" strokeLinecap="round">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                      </svg>
+                    </button>
                   </div>
-                  <div>
-                    <span style={{ fontSize: 18, fontWeight: 700, color: '#53f293' }}>{restaurant.whyTrending.returnRate}</span>
-                    <span style={{ fontSize: 10, fontWeight: 500, color: '#86efb2', marginLeft: 4 }}>Growth</span>
+                  <div style={{ fontSize: 11, fontWeight: 500, color: '#ffffff', marginBottom: 10 }}>
+                    Popular in your neighborhood
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 16 }}>
+                    <div>
+                      <span style={{ fontSize: 18, fontWeight: 700, color: '#ffffff' }}>{restaurant.recencyCount}</span>
+                      <span style={{ fontSize: 10, fontWeight: 500, color: '#86efb2', marginLeft: 4 }}>Booked this</span>
+                    </div>
+                    <div>
+                      <span style={{ fontSize: 18, fontWeight: 700, color: '#53f293' }}>{restaurant.whyTrending.returnRate}</span>
+                      <span style={{ fontSize: 10, fontWeight: 500, color: '#86efb2', marginLeft: 4 }}>Growth</span>
+                    </div>
                   </div>
                 </div>
+              )}
+            </div>
+
+            {hasFriends && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
+                <div style={{ display: 'flex' }}>
+                  {restaurant.friends.slice(0, 2).map((f, i) => (
+                    <div key={i} style={{
+                      width: 24, height: 24, borderRadius: 9999,
+                      border: '2px solid #ffffff',
+                      marginLeft: i > 0 ? -8 : 0,
+                      overflow: 'hidden', position: 'relative', flexShrink: 0,
+                    }}>
+                      <Image src={f.src} alt={f.alt} width={24} height={24} priority style={{ objectFit: 'cover', width: 24, height: 24, borderRadius: 9999 }} />
+                    </div>
+                  ))}
+                </div>
+                {extraFriends > 0 && (
+                  <span style={{ fontSize: 12, fontWeight: 600, color: '#08180f' }}>+{extraFriends}</span>
+                )}
               </div>
             )}
           </div>
