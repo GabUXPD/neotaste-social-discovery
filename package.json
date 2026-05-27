@@ -1,0 +1,36 @@
+{
+  "name": "neotaste-sprint",
+  "version": "1.0.0",
+  "description": "NeoTaste Social Discovery Sprint Prototype",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GabUXPD/neotaste-social-discovery.git"
+  },
+  "keywords": [],
+  "author": "GabUXPD",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GabUXPD/neotaste-social-discovery/issues"
+  },
+  "homepage": "https://github.com/GabUXPD/neotaste-social-discovery#readme",
+  "dependencies": {
+    "next": "^15.5.18",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.0",
+    "@types/node": "^25.9.1",
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^4.3.0",
+    "typescript": "^5.7.3"
+  }
+}
