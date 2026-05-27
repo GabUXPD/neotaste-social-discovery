@@ -332,8 +332,8 @@ function DealCard({ deal, hasSocial, bookedDealId }: { deal: FullDeal; hasSocial
           </span>
           <span style={{ width: 4, height: 4, borderRadius: 9999, background: '#ffffff', flexShrink: 0, display: 'inline-block' }} />
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 2 }}>
-            <span style={{ fontSize: 14, fontWeight: 700, color: '#53f293' }}>{deal.popularCount}</span>
-            <span style={{ fontSize: 14, fontWeight: 700, color: '#3ee380' }}>again</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#53f293' }}>{Math.round(deal.popularCount / 2)}</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#3ee380' }}>again</span>
           </span>
         </div>
 
