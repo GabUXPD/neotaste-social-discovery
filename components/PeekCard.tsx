@@ -201,15 +201,17 @@ export default function PeekCard({ restaurant, onClose, onViewDetail, isBooked =
                   <div style={{ fontSize: 11, fontWeight: 500, color: '#ffffff', marginBottom: 10 }}>
                     Popular in your neighborhood
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 16 }}>
-                    <div>
-                      <span style={{ fontSize: 18, fontWeight: 700, color: '#ffffff' }}>{restaurant.recencyCount}</span>
-                      <span style={{ fontSize: 10, fontWeight: 500, color: '#86efb2', marginLeft: 4 }}>Booked this</span>
-                    </div>
-                    <div>
-                      <span style={{ fontSize: 18, fontWeight: 700, color: '#53f293' }}>{restaurant.whyTrending.returnRate}</span>
-                      <span style={{ fontSize: 10, fontWeight: 500, color: '#86efb2', marginLeft: 4 }}>Growth</span>
-                    </div>
+                  <div style={{ display: 'flex', gap: 4 }}>
+                    {[{ label: '👌 great taste' }, { label: '🤑 value/quality' }].map((chip, i) => (
+                      <div key={i} style={{
+                        border: '1px solid rgba(254,254,254,0.2)', borderRadius: 40,
+                        padding: '4px 8px',
+                      }}>
+                        <span style={{ fontSize: 12, fontWeight: 500, color: '#fff592', whiteSpace: 'nowrap' }}>
+                          {chip.label}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
